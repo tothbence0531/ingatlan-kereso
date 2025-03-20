@@ -1,0 +1,113 @@
+nav {
+  h3 {
+    font-weight: 500;
+    position: relative;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &::after {
+      content: "key";
+      font-family: "Material Icons";
+      font-size: 13px;
+      color: var(--mat-sys-on-surface);
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: rotate(0deg);
+      opacity: 0;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    &:hover::after {
+      content: "key";
+      font-family: "Material Icons";
+      color: var(--mat-sys-on-surface);
+      font-size: 13px;
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-121%) rotate(-90deg);
+      opacity: 1;
+    }
+  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--mat-sys-primary-fixed-dim);
+  color: var(--mat-sys-on-surface);
+  height: 4rem;
+  ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    li {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 1rem;
+      font-size: 1rem;
+      font-weight: 400;
+      position: relative;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--mat-sys-on-surface);
+        transition: width 0.2s ease-out;
+      }
+
+      &:hover::after {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.icon-links {
+  li {
+    display: flex !important;
+  }
+  display: flex !important;
+}
+
+@media screen and (max-width: 768px) {
+  nav {
+    .primary-button {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 579px) {
+  .text-links {
+    display: none !important;
+  }
+  .icon-links {
+    display: flex !important;
+  }
+}
+
+@media screen and (min-width: 580px) {
+  .text-links {
+    display: flex !important;
+  }
+  .icon-links {
+    display: none !important;
+  }
+}
