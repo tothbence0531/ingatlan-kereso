@@ -1,8 +1,13 @@
 @use "@angular/material" as mat;
+@import "../../../styles.scss";
 
-.wrapper {
-  width: 100vw;
-  background-color: var(--mat-sys-primary);
+.top-wrapper {
+  width: 100%;
+  background-color: $primary-color;
+}
+
+.banner {
+  background-color: $primary-color;
 }
 
 .banner-text-container {
@@ -11,7 +16,7 @@
     font-size: 2.3rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
-    color: var(--mat-sys-on-primary);
+    color: $on-primary-color;
   }
   .primary-button {
     margin-top: 3rem;

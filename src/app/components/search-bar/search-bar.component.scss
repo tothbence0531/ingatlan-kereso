@@ -1,0 +1,35 @@
+@import "../../../styles.scss";
+
+form {
+  background-color: var(--mat-sys-surface-container);
+  padding: 2rem 2rem 1rem 2rem;
+  transform: translateY(-15%);
+  margin: 0 5%;
+}
+
+.top-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.bottom-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.budget-input {
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    display: none;
+  }
+  text-align: right;
+}
+
+@media screen and (max-width: 768px) {
+  .bottom-container {
+    flex-direction: column;
+  }
+}

@@ -42,6 +42,7 @@ html[data-theme="dark"] {
   color-scheme: dark;
 }
 
+// INFO: styling for material buttons
 /*.primary-button {
   @include mat.button-overrides(
     (
@@ -77,3 +78,22 @@ html[data-theme="dark"] {
 .bold {
   font-weight: bold;
 }
+
+// INFO: debug
+/* * {
+  outline: 1px solid red;
+}*/
+
+// INFO: VARIABLES
+
+$primary-color: var(--mat-sys-primary);
+$secondary-color: var(--mat-sys-secondary);
+$tertiary-color: var(--mat-sys-tertiary);
+$background-color: var(--mat-sys-background);
+$surface-color: var(--mat-sys-surface);
+$on-primary-color: var(--mat-sys-on-primary);
+$on-secondary-color: var(--mat-sys-on-secondary);
+$on-tertiary-color: var(--mat-sys-on-tertiary);
+$on-background-color: var(--mat-sys-on-background);
+$on-surface-color: var(--mat-sys-on-surface);
+$inverse-on-surface-color: var(--mat-sys-inverse-on-surface);

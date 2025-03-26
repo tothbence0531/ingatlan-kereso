@@ -1,0 +1,37 @@
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="search-bar">
+  <div class="top-container">
+    <h3>Böngéssz a jelenlegi ajánlatok között</h3>
+    <button mat-fab extended type="submit">Keresés</button>
+  </div>
+  <div class="bottom-container">
+    <mat-form-field appearance="outline">
+      <mat-label>Település</mat-label>
+      <mat-icon matSuffix>location_on</mat-icon>
+      <input
+        matInput
+        formControlName="location"
+        placeholder="Pl. Szeged, Budapest"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Típus</mat-label>
+      <mat-icon matSuffix>home</mat-icon>
+      <input
+        matInput
+        formControlName="type"
+        placeholder="Pl. Lakás, Kertesház"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Árkeret</mat-label>
+      <span class="suffix" matTextSuffix>Ft</span>
+      <input
+        class="budget-input"
+        matInput
+        type="number"
+        formControlName="budget"
+        placeholder="Pl. 40000"
+      />
+    </mat-form-field>
+  </div>
+</form>
