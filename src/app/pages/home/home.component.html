@@ -2,16 +2,37 @@
   <main class="container">
     <app-navbar></app-navbar>
     <div class="row">
-      <div class="col-md-4 col-sm-12 banner-text-container">
+      <div class="col-lg-4 col-md-12 banner-text-container">
         <h1>Találd meg a hozzád megfelelő otthont</h1>
         <p class="description">
           A KeyFinder kulcsfontosságú segítség az otthon megtalálásában.
         </p>
-        <button class="primary-button" mat-flat-button>Találj lakást</button>
+        <button
+          class="primary-button"
+          mat-raised-button
+          routerLink="/properties"
+        >
+          Találj lakást
+        </button>
+        <div class="row">
+          <div class="col">
+            <p class="description bold">1200+</p>
+            <p class="description">Eladó ingatlan</p>
+          </div>
+          <div class="col">
+            <p class="description bold">4000+</p>
+            <p class="description">Elégedett vásárló</p>
+          </div>
+          <div class="col">
+            <p class="description bold">100+</p>
+            <p class="description">Díjak</p>
+          </div>
+        </div>
       </div>
-      <div class="col-md-8 col-sm-12 banner-image-container">
-        <img class="banner-image" src="assets/home_banner2.png" alt="banner" />
+      <div class="col-lg-8 col-md-12 banner-image-container">
+        <img class="banner-image" src="assets/home_banner.png" alt="banner" />
       </div>
     </div>
+    <app-search-bar></app-search-bar>
   </main>
 </div>

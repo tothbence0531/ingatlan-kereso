@@ -11,19 +11,19 @@ nav {
       content: "key";
       font-family: "Material Icons";
       font-size: 13px;
-      color: var(--mat-sys-on-surface);
       position: absolute;
       left: 40px;
       top: 50%;
       transform: rotate(0deg);
       opacity: 0;
       transition: transform 0.2s ease, opacity 0.2s ease;
+      color: var(--mat-sys-on-primary);
     }
 
     &:hover::after {
       content: "key";
       font-family: "Material Icons";
-      color: var(--mat-sys-on-surface);
+      color: var(--mat-sys-on-primary);
       font-size: 13px;
       position: absolute;
       left: 40px;
@@ -36,8 +36,8 @@ nav {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--mat-sys-primary-fixed-dim);
-  color: var(--mat-sys-on-surface);
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
   height: 4rem;
   ul {
     display: flex;
@@ -68,7 +68,7 @@ nav {
         left: 0;
         width: 0;
         height: 2px;
-        background-color: var(--mat-sys-on-surface);
+        background-color: var(--mat-sys-on-primary);
         transition: width 0.2s ease-out;
       }
 
