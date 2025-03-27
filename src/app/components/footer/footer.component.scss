@@ -1,0 +1,77 @@
+@import "../../../styles.scss";
+
+.container {
+  padding-bottom: 3rem;
+  padding-top: 3rem;
+  color: white;
+
+  .image-container {
+    //background-color: red;
+    color: $primary-color;
+    position: relative;
+    img {
+      max-width: 10rem;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #ffb95f;
+    }
+  }
+  .middle-info {
+    //background-color: blue;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    section {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 500;
+      .icon {
+        background-color: $surface-container-color;
+        padding: 0.8rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        mat-icon {
+          font-size: 1.5rem;
+          color: $primary-color;
+        }
+      }
+    }
+  }
+  .bottom-info {
+    //background-color: green;
+    h4 {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    p {
+      padding-bottom: 1rem;
+      padding-top: 1rem;
+    }
+    .icons {
+      display: flex;
+      flex-direction: row;
+      gap: 0.8rem;
+      i {
+        font-size: 1.8rem;
+        background-color: $surface-container-color;
+        padding: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $primary-color;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .column {
+    padding-bottom: 2rem;
+  }
+}

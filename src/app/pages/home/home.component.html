@@ -1,6 +1,6 @@
 <div class="top-wrapper">
-  <section class="banner container">
-    <app-navbar></app-navbar>
+  <app-navbar></app-navbar>
+  <section class="container">
     <div class="header-row row">
       <div class="col-lg-4 col-md-12 banner-text-container">
         <h1>Találd meg a hozzád megfelelő otthont</h1>
@@ -38,4 +38,27 @@
 
 <div class="container">
   <app-search-bar />
+  <div class="new-header">
+    <p class="__left">
+      <span>Újdonságok</span>
+      A Legújabb Ingatlanaink
+    </p>
+    <p class="__right" routerLink="/properties">
+      <span>Fedezd fel hát mind</span>
+      <mat-icon class="right-arrow">trending_flat</mat-icon>
+    </p>
+  </div>
+</div>
+
+<div class="bottom-wrapper">
+  <div class="container">
+    <div class="row">
+      <app-property-card
+        class="col"
+        *ngFor="let property of properties$ | async"
+        [property]="property"
+      ></app-property-card>
+    </div>
+  </div>
+  <app-footer />
 </div>

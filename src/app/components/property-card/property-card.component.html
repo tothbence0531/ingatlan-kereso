@@ -1,19 +1,29 @@
-<!-- <div class="property-card">
-  <img src="{{ property.images[0] }}" alt="property-image" />
-  <div class="row">
-    <div class="col">
-      <p>{{ property.title }}</p>
-      <p>{{ property.price }}</p>
-    </div>
+<main>
+  <div class="image-container">
+    <img src="/assets/{{ property.images[0] }}" alt="image" />
   </div>
-
-  <p>{{ property.location }}</p>
-  <p>{{ property.description }}</p>
-  <button mat-raised-button>valami</button>
-  <button mat-fab extended>
-    <mat-icon>favorite</mat-icon>
-    Basic
-  </button>
-</div>
--->
-<button class="primary-button" mat-flat-button>Találj lakást</button>
+  <div class="details">
+    <p class="__location">
+      <mat-icon>location_on</mat-icon>
+      {{ property.location }},
+      {{ property.title }}
+    </p>
+    <div class="middle">
+      <p class="__type">
+        <mat-icon>apartment</mat-icon>
+        {{ property.type }}
+      </p>
+      <p class="__roomCount">
+        <mat-icon>bed</mat-icon>
+        {{ property.roomCount }} szoba
+      </p>
+    </div>
+    <div class="bottom">
+      <button mat-raised-button>Megtekintés</button>
+      <p class="__price">
+        {{ property.price | currency : "HUF" : "symbol-narrow" : "1.0-0" }}
+      </p>
+    </div>
+    <!-- <p class="__description">{{ property.description }}</p> -->
+  </div>
+</main>
