@@ -21,7 +21,6 @@ import { DetailedSearchbarComponent } from '../../components/detailed-searchbar/
     PropertyCardComponent,
     AsyncPipe,
     FooterComponent,
-    DetailedSearchbarComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

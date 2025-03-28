@@ -3,11 +3,7 @@
     <p>{{ formatPrice(minPropertyPrice) }} &rarr;</p>
     <p>&larr; {{ formatPrice(maxPropertyPrice) }}</p>
   </div>
-  <form
-    [formGroup]="detailedSearchForm"
-    (ngSubmit)="onSubmit()"
-    class="search-bar"
-  >
+  <form [formGroup]="detailedSearchForm" class="search-bar">
     <div class="slider-container">
       <mat-slider
         min="{{ 0 }}"
@@ -26,6 +22,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Település</mat-label>
         <mat-icon matSuffix>location_on</mat-icon>
+        <mat-hint>Város</mat-hint>
         <input
           type="text"
           matInput
@@ -42,6 +39,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Típus</mat-label>
         <mat-icon matSuffix>home</mat-icon>
+        <mat-hint>Ingatlan típus</mat-hint>
         <input
           type="text"
           matInput
@@ -58,6 +56,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Szobaszám</mat-label>
         <mat-icon matSuffix>bed</mat-icon>
+        <mat-hint>Minimum szobaszám</mat-hint>
         <input
           type="number"
           matInput
@@ -65,10 +64,6 @@
           placeholder="Pl. 2"
         />
       </mat-form-field>
-
-      <button class="search-button" type="submit" mat-fab>
-        <mat-icon>search</mat-icon>
-      </button>
     </div>
   </form>
 </div>

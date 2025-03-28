@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Property } from '../models/property.model';
 import { BehaviorSubject } from 'rxjs';
+import { SearchCriteria } from '../models/search.model';
 
 @Injectable({
   providedIn: 'root',
@@ -208,8 +209,32 @@ export class PropertyService {
       images: ['lakokocsi.webp'],
     },
   ]);
-
   public properties$ = this.propertiesSubject$.asObservable();
 
   constructor() {}
+
+  filterProperties(criteria: SearchCriteria): Property[] {
+    //console.log(criteria);
+    return this.propertiesSubject$.value.filter((property) => {
+      if (
+        (!criteria.location ||
+          (criteria.location &&
+            property.location
+              .toLowerCase()
+              .includes(criteria.location.toLowerCase()))) &&
+        (!criteria.type ||
+          (criteria.type &&
+            property.type
+              .toLowerCase()
+              .includes(criteria.type.toLowerCase()))) &&
+        (!criteria.minPrice || property.price >= criteria.minPrice) &&
+        (!criteria.maxPrice || property.price <= criteria.maxPrice) &&
+        (!criteria.bedrooms || property.roomCount >= criteria.bedrooms)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
 }

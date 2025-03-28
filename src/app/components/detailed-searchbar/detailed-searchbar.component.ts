@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MaterialModule } from '../../modules/material.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -21,6 +21,9 @@ export class DetailedSearchbarComponent implements OnInit {
   maxPropertyPrice: number = 0;
   typeFilterOptions!: Observable<string[]>;
   locationFilterOptions!: Observable<string[]>;
+  filteredProperties!: Property[];
+
+  @Output() onInputChanged = new EventEmitter<SearchCriteria>();
 
   constructor(
     private fb: FormBuilder,
@@ -36,14 +39,18 @@ export class DetailedSearchbarComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    console.log(this.detailedSearchForm.value);
-  }
-
   ngOnInit() {
     this.loadProperties();
     this.loadRouteQuery();
     this.loadFilterOptions();
+    this.filterProperties();
+  }
+
+  filterProperties() {
+    this.detailedSearchForm.valueChanges.subscribe((value) => {
+      const criteria = value as SearchCriteria;
+      this.onInputChanged.emit(criteria);
+    });
   }
 
   loadFilterOptions() {
@@ -69,11 +76,11 @@ export class DetailedSearchbarComponent implements OnInit {
         type: params['type'] || '',
         minPrice: params['minPrice'] ? Number(params['minPrice']) : 0,
         maxPrice: params['maxPrice']
-          ? Number(params['maxPrice'])
+          ? Number(params['maxPrice']) * 1_000_000
           : this.maxPropertyPrice,
-        bedrooms: params['bedrooms'] ? Number(params['bedrooms']) : 0,
+        bedrooms: params['bedrooms'] ? Number(params['bedrooms']) : null,
       };
-      console.log(searchCriteria);
+      //console.log(searchCriteria);
       this.detailedSearchForm.patchValue(searchCriteria);
     });
   }
@@ -104,23 +111,23 @@ export class DetailedSearchbarComponent implements OnInit {
     }
   }
 
-  onOptionSelected($event: any) {
-    console.log($event);
-  }
-
   _FILTER_TYPE(value: string): string[] {
     const filterValue = value.toLocaleLowerCase();
-    const types = this.properties.map((property) => property.type);
-    return types.filter((type) =>
+    const uniqueTypes = [
+      ...new Set(this.properties.map((property) => property.type)),
+    ];
+    return uniqueTypes.filter((type) =>
       type.toLocaleLowerCase().includes(filterValue)
     );
   }
 
   _FILTER_LOCATION(value: string): string[] {
     const filterValue = value.toLocaleLowerCase();
-    const types = this.properties.map((property) => property.location);
-    return types.filter((type) =>
-      type.toLocaleLowerCase().includes(filterValue)
+    const uniqueLocations = [
+      ...new Set(this.properties.map((property) => property.location)),
+    ];
+    return uniqueLocations.filter((location) =>
+      location.toLocaleLowerCase().includes(filterValue)
     );
   }
 }

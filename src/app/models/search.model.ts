@@ -3,5 +3,5 @@ export interface SearchCriteria {
   type?: string;
   minPrice?: number;
   maxPrice?: number;
-  bedrooms?: number;
+  bedrooms?: number | null;
 }

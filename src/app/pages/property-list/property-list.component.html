@@ -3,14 +3,14 @@
 </nav>
 <div class="wrapper">
   <div class="container">
-    <app-detailed-searchbar />
+    <app-detailed-searchbar (onInputChanged)="onInputChanged($event)" />
   </div>
 </div>
 
 <div class="card-container">
   <div class="container">
     <div class="row">
-      @for (property of properties$ | async; track $index) {
+      @for (property of filteredProperties; track $index) {
       <app-property-card class="col" [property]="property"></app-property-card>
       }@empty {
       <h1 class="not-found">Nincs találat</h1>
