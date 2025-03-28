@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { Property } from '../../models/property.model';
 import { AsyncPipe, NgFor } from '@angular/common';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { DetailedSearchbarComponent } from '../../components/detailed-searchbar/detailed-searchbar.component';
 
 @Component({
   selector: 'app-home',
@@ -18,9 +19,9 @@ import { FooterComponent } from '../../components/footer/footer.component';
     MaterialModule,
     RouterLink,
     PropertyCardComponent,
-    NgFor,
     AsyncPipe,
     FooterComponent,
+    DetailedSearchbarComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -29,6 +30,6 @@ export class HomeComponent {
   properties$: Observable<Property[]>;
   constructor(private propertyService: PropertyService) {
     this.properties$ = this.propertyService.properties$;
-    console.log(this.properties$);
+    //console.log(this.properties$);
   }
 }

@@ -9,6 +9,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const MATERIAL_MODULES = [
   MatButtonModule,
@@ -21,6 +23,8 @@ const MATERIAL_MODULES = [
   MatDialogModule,
   MatTableModule,
   MatPaginatorModule,
+  MatSliderModule,
+  MatAutocompleteModule,
 ];
 
 @NgModule({

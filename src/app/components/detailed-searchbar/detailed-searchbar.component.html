@@ -1,0 +1,74 @@
+<div class="wrapper">
+  <div class="spacer">
+    <p>{{ formatPrice(minPropertyPrice) }} &rarr;</p>
+    <p>&larr; {{ formatPrice(maxPropertyPrice) }}</p>
+  </div>
+  <form
+    [formGroup]="detailedSearchForm"
+    (ngSubmit)="onSubmit()"
+    class="search-bar"
+  >
+    <div class="slider-container">
+      <mat-slider
+        min="{{ 0 }}"
+        max="{{ maxPropertyPrice }}"
+        step="1000000"
+        discrete
+        showTickMarks
+        [displayWith]="formatPrice"
+      >
+        <input formControlName="minPrice" matSliderStartThumb />
+        <input formControlName="maxPrice" matSliderEndThumb />
+      </mat-slider>
+    </div>
+
+    <div class="input-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Település</mat-label>
+        <mat-icon matSuffix>location_on</mat-icon>
+        <input
+          type="text"
+          matInput
+          [matAutocomplete]="locationAuto"
+          formControlName="location"
+        />
+        <mat-autocomplete #locationAuto="matAutocomplete">
+          @for (option of locationFilterOptions | async; track $index) {
+          <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Típus</mat-label>
+        <mat-icon matSuffix>home</mat-icon>
+        <input
+          type="text"
+          matInput
+          [matAutocomplete]="typeAuto"
+          formControlName="type"
+        />
+        <mat-autocomplete #typeAuto="matAutocomplete">
+          @for (option of typeFilterOptions | async; track $index) {
+          <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Szobaszám</mat-label>
+        <mat-icon matSuffix>bed</mat-icon>
+        <input
+          type="number"
+          matInput
+          formControlName="bedrooms"
+          placeholder="Pl. 2"
+        />
+      </mat-form-field>
+
+      <button class="search-button" type="submit" mat-fab>
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+  </form>
+</div>

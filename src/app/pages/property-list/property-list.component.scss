@@ -4,3 +4,24 @@ nav {
   width: 100%;
   background-color: $primary-color;
 }
+.wrapper {
+  background-color: $background-color;
+  padding-bottom: 5rem;
+}
+
+.card-container {
+  background-color: black;
+  .col {
+    transform: translateY(-3rem);
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1rem;
+  }
+}
+
+.not-found {
+  font-size: 3rem;
+  padding: 10rem 0;
+  color: $on-background-color;
+  text-align: center;
+}

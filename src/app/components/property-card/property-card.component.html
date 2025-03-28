@@ -5,13 +5,12 @@
   <div class="details">
     <p class="__location">
       <mat-icon>location_on</mat-icon>
-      {{ property.location }},
-      {{ property.title }}
+      {{ property.location + ", " + property.title | length : 30 }}
     </p>
     <div class="middle">
       <p class="__type">
         <mat-icon>apartment</mat-icon>
-        {{ property.type }}
+        {{ property.type | length : 11 }}
       </p>
       <p class="__roomCount">
         <mat-icon>bed</mat-icon>

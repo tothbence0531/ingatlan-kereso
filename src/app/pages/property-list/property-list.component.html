@@ -1,12 +1,21 @@
 <nav>
   <app-navbar></app-navbar>
 </nav>
-<div class="container">
-  <div class="row">
-    <app-property-card
-      class="col"
-      *ngFor="let property of properties$ | async"
-      [property]="property"
-    ></app-property-card>
+<div class="wrapper">
+  <div class="container">
+    <app-detailed-searchbar />
   </div>
+</div>
+
+<div class="card-container">
+  <div class="container">
+    <div class="row">
+      @for (property of properties$ | async; track $index) {
+      <app-property-card class="col" [property]="property"></app-property-card>
+      }@empty {
+      <h1 class="not-found">Nincs találat</h1>
+      }
+    </div>
+  </div>
+  <app-footer />
 </div>
