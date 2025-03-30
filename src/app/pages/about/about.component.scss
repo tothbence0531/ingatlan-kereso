@@ -1,0 +1,66 @@
+@import "../../../styles.scss";
+.wrapper {
+  background-color: $primary-color;
+}
+
+.title {
+  margin-top: 2rem;
+  font-weight: 400;
+  color: $on-background-color;
+  text-align: center;
+}
+
+.greetings {
+  color: $on-background-color;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+.keyword {
+  font-weight: bold;
+  color: $primary-color;
+}
+
+.block {
+  display: block;
+}
+
+.container {
+  .card-row {
+    padding: 0 1rem;
+    display: flex;
+    gap: 1rem;
+    background-color: $surface-container-color;
+
+    margin-bottom: 3rem;
+    .about-card {
+      background-color: $surface-container-color;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+      margin-top: 2rem;
+      p {
+        padding: 0.5rem 0;
+      }
+      img {
+        max-width: 60%;
+        transform: translateY(-2rem);
+        background-color: $surface-container-color;
+      }
+    }
+  }
+}
+
+.footer-wrapper {
+  width: 100%;
+  background-color: black;
+}
+
+.middle-wrapper {
+  width: 100%;
+  background-color: $surface-container-color;
+  padding: 2rem 0;
+  margin-top: 3rem;
+}
