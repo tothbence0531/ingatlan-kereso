@@ -31,7 +31,7 @@ export class PropertyListComponent implements OnInit {
 
   onInputChanged(criteria: SearchCriteria) {
     this.filteredProperties = this.propertyService.filterProperties(criteria);
-    console.log(criteria);
+    //console.log(criteria);
   }
 
   ngOnInit() {

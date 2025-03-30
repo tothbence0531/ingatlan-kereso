@@ -82,6 +82,7 @@ export class DetailedSearchbarComponent implements OnInit {
       };
       //console.log(searchCriteria);
       this.detailedSearchForm.patchValue(searchCriteria);
+      this.onInputChanged.emit(searchCriteria);
     });
   }
 

@@ -7,9 +7,8 @@ import { PropertyCardComponent } from '../../components/property-card/property-c
 import { PropertyService } from '../../services/property.service';
 import { Observable } from 'rxjs';
 import { Property } from '../../models/property.model';
-import { AsyncPipe, NgFor } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { DetailedSearchbarComponent } from '../../components/detailed-searchbar/detailed-searchbar.component';
 
 @Component({
   selector: 'app-home',
