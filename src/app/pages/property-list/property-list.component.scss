@@ -25,3 +25,8 @@ nav {
   color: $on-background-color;
   text-align: center;
 }
+
+mat-paginator {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}

@@ -10,12 +10,19 @@
 <div class="card-container">
   <div class="container">
     <div class="row">
-      @for (property of filteredProperties; track $index) {
+      @for (property of paginatedProperties; track $index) {
       <app-property-card class="col" [property]="property"></app-property-card>
       }@empty {
       <h1 class="not-found">Nincs találat</h1>
       }
     </div>
   </div>
+  <mat-paginator
+    [length]="filteredProperties.length"
+    [pageSizeOptions]="[5, 10, 20]"
+    [pageIndex]="pageIndex"
+    showFirstLastButtons
+    (page)="onPageChange($event)"
+  ></mat-paginator>
   <app-footer />
 </div>

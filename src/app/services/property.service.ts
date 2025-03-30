@@ -237,4 +237,11 @@ export class PropertyService {
       }
     });
   }
+
+  paginateProperties(pageIndex: number, pageSize: number): Property[] {
+    return this.propertiesSubject$.value.slice(
+      pageIndex * pageSize,
+      (pageIndex + 1) * pageSize
+    );
+  }
 }

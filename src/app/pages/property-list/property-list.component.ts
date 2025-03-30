@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { DetailedSearchbarComponent } from '../../components/detailed-searchbar/detailed-searchbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { SearchCriteria } from '../../models/search.model';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-property-list',
@@ -24,6 +25,9 @@ import { SearchCriteria } from '../../models/search.model';
 export class PropertyListComponent implements OnInit {
   properties$: Observable<Property[]>;
   filteredProperties!: Property[];
+  paginatedProperties!: Property[];
+  pageSize = 5;
+  pageIndex = 0;
 
   constructor(private propertyService: PropertyService) {
     this.properties$ = this.propertyService.properties$;
@@ -31,10 +35,28 @@ export class PropertyListComponent implements OnInit {
 
   onInputChanged(criteria: SearchCriteria) {
     this.filteredProperties = this.propertyService.filterProperties(criteria);
-    //console.log(criteria);
+    this.pageIndex = 0;
+    this.updatePaginatedProperties();
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    this.updatePaginatedProperties();
+  }
+
+  updatePaginatedProperties() {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginatedProperties = this.filteredProperties.slice(start, end);
   }
 
   ngOnInit() {
     this.filteredProperties = this.propertyService.filterProperties({});
+    this.paginatedProperties = this.propertyService.paginateProperties(
+      this.pageIndex,
+      this.pageSize
+    );
   }
 }
