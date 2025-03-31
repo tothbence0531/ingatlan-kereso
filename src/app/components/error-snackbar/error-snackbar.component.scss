@@ -1,0 +1,15 @@
+@import "../../../styles.scss";
+
+:host {
+  display: flex;
+  color: #be0e17;
+  span {
+    font-weight: 700;
+  }
+  button {
+    color: #be0e17;
+    mat-icon {
+      color: #be0e17;
+    }
+  }
+}

@@ -5,12 +5,19 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  MatSnackBarAction,
+  MatSnackBarActions,
+  MatSnackBarLabel,
+  MatSnackBarModule,
+} from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
 
 const MATERIAL_MODULES = [
   MatButtonModule,
@@ -25,6 +32,12 @@ const MATERIAL_MODULES = [
   MatPaginatorModule,
   MatSliderModule,
   MatAutocompleteModule,
+  MatButtonModule,
+  MatSnackBarLabel,
+  MatSnackBarActions,
+  MatSnackBarAction,
+  MatCheckboxModule,
+  MatRadioModule,
 ];
 
 @NgModule({

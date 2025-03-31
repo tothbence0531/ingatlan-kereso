@@ -12,11 +12,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorSnackbarComponent } from '../../components/error-snackbar/error-snackbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
-
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   imports: [
     MaterialModule,
     ReactiveFormsModule,
@@ -24,24 +24,24 @@ import { AuthService } from '../../services/auth.service';
     FooterComponent,
     RouterLink,
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
-  loginForm: FormGroup;
+export class RegisterComponent {
+  registerForm: FormGroup;
   hide = signal(true);
   snackBarRef = inject(MatSnackBar);
   @Input() durationInSeconds = 5;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.loginForm = this.fb.group({
+  constructor(private fb: FormBuilder, private authService: AuthService) {
+    this.registerForm = this.fb.group({
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      rePassword: ['', [Validators.required, Validators.minLength(6)]],
+      role: ['buyer', [Validators.required]],
     });
   }
 
@@ -51,21 +51,29 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    if (this.loginForm.invalid) {
+    if (this.registerForm.invalid) {
       this.openErrorSnackbar('A beviteli adatok érvénytelenek!');
       return;
+    } else if (
+      this.registerForm.value.password !== this.registerForm.value.rePassword
+    ) {
+      this.openErrorSnackbar('A jelszavak nem egyeznek!');
+      return;
     }
-    const user = this.loginForm.value;
-    this.authService
-      .login({ email: user.email, password: user.password })
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/']);
-        },
-        error: (err) => {
-          this.openErrorSnackbar(err.message || 'Bejelentkezés sikertelen');
-        },
-      });
+
+    const user: User = {
+      id: this.authService.generateId(),
+      name:
+        this.registerForm.value.firstName +
+        ' ' +
+        this.registerForm.value.lastName,
+      email: this.registerForm.value.email,
+      role: this.registerForm.value.role,
+      password_hashed: this.registerForm.value.password,
+    };
+    this.authService.register(user).subscribe((user) => {
+      console.log(user);
+    });
   }
 
   openErrorSnackbar(message: string) {

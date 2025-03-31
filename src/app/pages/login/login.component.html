@@ -1,1 +1,68 @@
-<p>login works!</p>
+<div class="nav-wrapper">
+  <app-navbar></app-navbar>
+</div>
+<div class="wrapper">
+  <div class="container">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <h1>Bejelentkezés</h1>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          placeholder="Email"
+          formControlName="email"
+        />
+        @if (this.loginForm.get('email')?.hasError('required')) {
+        <mat-error>Email megadása kötelező</mat-error>
+        } @if (this.loginForm.get('email')?.hasError('email')) {
+        <mat-error>Érvénytelen email cím</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Jelszó</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="hide() ? 'password' : 'text'"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        @if (this.loginForm.get('password')?.hasError('required')) {
+        <mat-error>Jelszó megadása kötelező</mat-error>
+        } @if (this.loginForm.get('password')?.hasError('minlength')) {
+        <mat-error>Minimum 6 karakter hosszú jelszó szükséges</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="row">
+        <div class="col">
+          <mat-checkbox [labelPosition]="'after'">Emlékezz rám</mat-checkbox>
+        </div>
+
+        <div class="col">
+          <p routerLink="/forgotpassword">Elfelejtett jelszó?</p>
+        </div>
+      </div>
+
+      <button mat-flat-button color="primary" type="submit">Login</button>
+
+      <p class="register">
+        Nincs fiókod? <span routerLink="/register">Regisztráció</span>
+      </p>
+    </form>
+  </div>
+
+  <div class="footer">
+    <app-footer />
+  </div>
+</div>

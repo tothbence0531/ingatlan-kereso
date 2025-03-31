@@ -2,5 +2,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  savedProperties: string[];
+  role: string;
+  password_hashed?: string;
+  savedProperties?: string[];
 }

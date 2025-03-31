@@ -1,0 +1,125 @@
+<div class="nav-wrapper">
+  <app-navbar></app-navbar>
+</div>
+<div class="wrapper">
+  <div class="container">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <h1>Regisztráció</h1>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="outline">
+            <mat-label>Vezetéknév</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Vezetéknév"
+              formControlName="firstName"
+            />
+            @if (this.registerForm.get('firstName')?.hasError('required')) {
+            <mat-error>Vezetéknév megadása kötelező</mat-error>
+            } @if (this.registerForm.get('firstName')?.hasError('minlength')) {
+            <mat-error>Minimum 2 karakter hosszú név szükséges</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="outline">
+            <mat-label>Keresztnév</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Keresztnév"
+              formControlName="lastName"
+            />
+            @if (this.registerForm.get('lastName')?.hasError('required')) {
+            <mat-error>Keresztnév megadása kötelező</mat-error>
+            } @if (this.registerForm.get('lastName')?.hasError('minlength')) {
+            <mat-error>Minimum 2 karakter hosszú név szükséges</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          placeholder="Email"
+          formControlName="email"
+        />
+        @if (this.registerForm.get('email')?.hasError('required')) {
+        <mat-error>Email megadása kötelező</mat-error>
+        } @if (this.registerForm.get('email')?.hasError('email')) {
+        <mat-error>Érvénytelen email cím</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Jelszó</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="hide() ? 'password' : 'text'"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        @if (this.registerForm.get('password')?.hasError('required')) {
+        <mat-error>Jelszó megadása kötelező</mat-error>
+        } @if (this.registerForm.get('password')?.hasError('minlength')) {
+        <mat-error>Minimum 6 karakter hosszú jelszó szükséges</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-radio-group formControlName="role" class="row">
+        <mat-radio-button value="buyer" class="col">Vásárló</mat-radio-button>
+        <mat-radio-button value="seller" class="col">Eladó</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Jelszó ismét</mat-label>
+        <input
+          matInput
+          formControlName="rePassword"
+          [type]="hide() ? 'password' : 'text'"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        @if (this.registerForm.get('rePassword')?.hasError('required')) {
+        <mat-error>Jelszó megadása kötelező</mat-error>
+        } @if (this.registerForm.get('rePassword')?.hasError('minlength')) {
+        <mat-error>Minimum 6 karakter hosszú jelszó szükséges</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" type="submit">
+        Regisztráció
+      </button>
+
+      <p class="login">
+        Van már fiókod? <span routerLink="/login">Bejelentkezés</span>
+      </p>
+    </form>
+  </div>
+
+  <div class="footer">
+    <app-footer />
+  </div>
+</div>
