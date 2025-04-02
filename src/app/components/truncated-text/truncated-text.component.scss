@@ -1,0 +1,11 @@
+@import "../../../styles.scss";
+
+.description-container {
+  margin: 8px 0;
+}
+span {
+  cursor: pointer;
+  color: $primary-color;
+  display: flex;
+  align-items: center;
+}

@@ -1,16 +1,59 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
-import { PropertyListComponent } from './pages/property-list/property-list.component';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { AboutComponent } from './pages/about/about.component';
-import { LoginComponent } from './pages/login/login.component';
-import { RegisterComponent } from './pages/register/register.component';
+import { authGuard } from './services/auth.guard';
+import { guestGuard } from './services/guest.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'properties', component: PropertyListComponent },
-  { path: 'about', component: AboutComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: '**', component: NotFoundComponent },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./pages/home/home.component').then((m) => m.HomeComponent),
+  },
+  {
+    path: 'properties',
+    loadComponent: () =>
+      import('./pages/property-list/property-list.component').then(
+        (m) => m.PropertyListComponent
+      ),
+  },
+  {
+    path: 'about',
+    loadComponent: () =>
+      import('./pages/about/about.component').then((m) => m.AboutComponent),
+  },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./pages/login/login.component').then((m) => m.LoginComponent),
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./pages/register/register.component').then(
+        (m) => m.RegisterComponent
+      ),
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('./pages/user-profile/user-profile.component').then(
+        (m) => m.UserProfileComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'property/:id',
+    loadComponent: () =>
+      import('./pages/property-details/property-details.component').then(
+        (m) => m.PropertyDetailsComponent
+      ),
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./pages/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent
+      ),
+  },
 ];

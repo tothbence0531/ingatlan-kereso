@@ -1,0 +1,18 @@
+<div class="description-container">
+  @if (text.length > maxLength) { @if (isExpanded) {
+  <p>{{ text }}</p>
+  } @else {
+  <p>{{ truncatedText }}...</p>
+  }
+  <span (click)="toggleExpand()">
+    @if (isExpanded) {
+    <mat-icon>expand_less</mat-icon>
+    } @else {
+    <mat-icon>expand_more</mat-icon>
+    }
+    {{ isExpanded ? "Kevesebb" : "Több" }}
+  </span>
+  } @else {
+  <p>{{ text }}</p>
+  }
+</div>

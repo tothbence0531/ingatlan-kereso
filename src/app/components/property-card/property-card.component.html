@@ -18,11 +18,12 @@
       </p>
     </div>
     <div class="bottom">
-      <button mat-raised-button>Megtekintés</button>
+      <a mat-raised-button [routerLink]="'/property/' + property.id">
+        Megtekintés
+      </a>
       <p class="__price">
         {{ property.price | currency : "HUF" : "symbol-narrow" : "1.0-0" }}
       </p>
     </div>
-    <!-- <p class="__description">{{ property.description }}</p> -->
   </div>
 </main>

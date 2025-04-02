@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorSnackbarComponent } from '../../components/error-snackbar/error-snackbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -37,7 +37,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -60,7 +61,9 @@ export class LoginComponent {
       .login({ email: user.email, password: user.password })
       .subscribe({
         next: () => {
-          this.router.navigate(['/']);
+          this.router.navigateByUrl(
+            this.route.snapshot.queryParams['returnUrl'] || '/'
+          );
         },
         error: (err) => {
           this.openErrorSnackbar(err.message || 'Bejelentkezés sikertelen');

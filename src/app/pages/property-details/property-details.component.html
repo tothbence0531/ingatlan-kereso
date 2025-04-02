@@ -1,1 +1,71 @@
-<p>property-details works!</p>
+<div class="nav-wrapper">
+  <app-navbar></app-navbar>
+</div>
+
+<div class="container">
+  <div class="card row">
+    <h1>{{ property.title }}</h1>
+    <p class="created-at">
+      Közzétéve: {{ property.created_at | date : "yyyy.MM.dd HH:mm" }}
+    </p>
+    <div class="col-lg-8 col-12 img-container">
+      <div class="image-actions">
+        <button mat-flat-button>Időpontfoglalás</button>
+        <mat-icon
+          matRipple
+          matTooltip="Kedvencekhez adás"
+          [matRippleRadius]="40"
+          >favorite</mat-icon
+        >
+      </div>
+
+      <img
+        src="/assets/{{ property.images[0] }}"
+        alt="property-image:{{ property.id }}"
+      />
+    </div>
+
+    <div class="col-lg-4 col-12 more-images-container">
+      <img
+        class=""
+        src="/assets/{{ property.images[0] }}"
+        alt="property-image:{{ property.id }}"
+      />
+      <img
+        class=""
+        src="/assets/{{ property.images[0] }}"
+        alt="property-image:{{ property.id }}"
+      />
+    </div>
+
+    <div class="col-md-6 col-12 details-container">
+      <h2 class="location">
+        <mat-icon>location_on</mat-icon>
+
+        {{ property.location }}
+      </h2>
+      <p class="type">
+        <mat-icon>apartment</mat-icon>
+        {{ property.type }}
+      </p>
+      <p class="room-count">
+        <mat-icon>bed</mat-icon>
+        {{ property.roomCount }} szoba
+      </p>
+    </div>
+
+    <div class="col-md-6 col-12 price">
+      <p>{{ property.price | currency : "HUF" : "symbol-narrow" : "1.0-0" }}</p>
+    </div>
+
+    <p class="long-description">Hosszú leírás:</p>
+    <app-truncated-text
+      [text]="property.description"
+      [maxLength]="800"
+    ></app-truncated-text>
+  </div>
+</div>
+
+<div class="footer-wrapper">
+  <app-footer />
+</div>

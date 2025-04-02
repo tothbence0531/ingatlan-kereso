@@ -5,12 +5,15 @@ import { delay, map, Observable, of } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
+
+// TODO: change to bcrypt, add password reset, database, salt, register/login rework
 export class AuthService {
   private usersKey = 'auth-users';
   private currentUserKey = 'auth-current-user';
 
   private currentUser = signal<User | null>(null);
-  public isAuthenticated = computed(() => this.currentUser !== null);
+  public currentUserSignal = computed(() => this.currentUser());
+  public isAuthenticated = computed(() => this.currentUser() !== null);
   public userRole = computed(() => this.currentUser()?.role || null);
 
   constructor() {
@@ -18,7 +21,7 @@ export class AuthService {
   }
 
   loadCurrentUser() {
-    const storedUser = localStorage.getItem(this.usersKey);
+    const storedUser = localStorage.getItem(this.currentUserKey);
     if (storedUser) {
       this.currentUser.set(JSON.parse(storedUser));
     }
@@ -31,7 +34,7 @@ export class AuthService {
         const users = this.getStoredUsers();
 
         if (users.some((u) => u.email === user.email)) {
-          throw new Error('Email already exists');
+          throw new Error('Ez az email cím már használatban van');
         }
 
         const newUser = {
@@ -39,7 +42,7 @@ export class AuthService {
           name: user.name,
           email: user.email,
           role: user.role,
-          password_hashed: user.password_hashed,
+          password_hashed: this.simpleHash(user.password_hashed),
           savedProperties: user.savedProperties,
         };
 
@@ -64,16 +67,15 @@ export class AuthService {
         const userToLogin = users.find((u) => u.email === email);
 
         if (!userToLogin) {
-          throw new Error('Invalid email or password');
+          throw new Error('Helytelen email vagy jelszó');
         }
 
-        if (userToLogin.password_hashed !== password) {
-          throw new Error('Invalid email or password');
+        if (userToLogin.password_hashed !== this.simpleHash(password)) {
+          throw new Error('Helytelen email vagy jelszó');
         }
 
-        if (password !== 'demo123') {
-          throw new Error('Invalid password');
-        }
+        userToLogin.lastLogin = new Date();
+        localStorage.setItem(this.usersKey, JSON.stringify(users));
 
         this.currentUser.set(userToLogin);
         localStorage.setItem(this.currentUserKey, JSON.stringify(userToLogin));
@@ -102,5 +104,16 @@ export class AuthService {
 
   generateId(): string {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  }
+
+  private simpleHash(password: string): string {
+    // TODO: change to bcrypt
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+      const char = password.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash;
+    }
+    return hash.toString();
   }
 }

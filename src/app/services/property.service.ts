@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Property } from '../models/property.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { SearchCriteria } from '../models/search.model';
 
 @Injectable({
@@ -14,9 +14,11 @@ export class PropertyService {
       type: 'Garzonlakás',
       price: 15_000_000,
       location: 'Miskolc',
-      description: 'Ez egy hosszu leiras most itt nekem',
+      description:
+        'Adipisicing aute deserunt et nisi adipisicing adipisicing velit ut excepteur irure. Consequat pariatur tempor Lorem exercitation amet deserunt in labore ex in culpa proident occaecat. Eiusmod dolor veniam labore duis ut voluptate ut amet excepteur. ~Ipsum officia exercitation consequat laborum excepteur. Elit consectetur ullamco elit sint sit magna commodo nulla excepteur ut est id cillum. Elit laborum dolor exercitation non laboris ex. Fugiat occaecat ex voluptate minim ut irure esse ut ea aute nisi. Velit sunt culpa eiusmod sint sit anim aute laboris proident cupidatat deserunt eu irure labore. Eiusmod quis occaecat nostrud cillum.Elit reprehenderit nostrud aliquip in deserunt tempor quis anim eiusmod. Exercitation excepteur eu do non Lorem consectetur anim id dolor labore mollit mollit ex. Labore anim incididunt quis officia sit eiusmod eu. Velit cupidatat magna irure sint voluptate laboris. Excepteur magna aliquip laborum do excepteur ipsum nulla officia cillum tempor ad eu.Esse non cupidatat minim fugiat. Nisi ea do culpa magna quis ex aliqua et excepteur do. Ex amet cillum labore anim id.Do magna sint esse sint non. Dolor aute adipisicing elit aliquip nulla sit nostrud Lorem ea occaecat sunt aute et Lorem. Nisi pariatur officia voluptate officia veniam amet.Nulla minim proident ea nulla dolor. Ea ut cillum tempor nisi laboris culpa. Voluptate et nisi exercitation sit labore reprehenderit eiusmod aute. Do occaecat in cupidatat ut ullamco adipisicing sunt. Veniam id amet commodo tempor Lorem voluptate non officia enim. Tempor ut ad ex ea aliqua dolore sint sunt tempor.',
       roomCount: 2,
       images: ['minkeraft.webp'],
+      created_at: new Date(),
     },
     {
       id: 2,
@@ -27,6 +29,7 @@ export class PropertyService {
       description: 'Sarkanyharcos',
       roomCount: 53,
       images: ['winterhold.jpg'],
+      created_at: new Date(),
     },
     {
       id: 3,
@@ -37,6 +40,7 @@ export class PropertyService {
       description: 'fasz',
       roomCount: 53,
       images: ['amcsi.webp'],
+      created_at: new Date(),
     },
     {
       id: 4,
@@ -47,6 +51,7 @@ export class PropertyService {
       description: 'Pokol 217. szobája',
       roomCount: 30,
       images: ['irinyi.jpg'],
+      created_at: new Date(),
     },
     {
       id: 5,
@@ -57,6 +62,7 @@ export class PropertyService {
       description: 'Lenyűgöző panoráma és saját strand.',
       roomCount: 8,
       images: ['balatonvilla.jpg'],
+      created_at: new Date(),
     },
     {
       id: 6,
@@ -67,6 +73,7 @@ export class PropertyService {
       description: 'Remek kilátás és közlekedés.',
       roomCount: 3,
       images: ['panel.webp'],
+      created_at: new Date(),
     },
     {
       id: 7,
@@ -77,6 +84,7 @@ export class PropertyService {
       description: 'Alacsony mennyezet, de kényelmes.',
       roomCount: 4,
       images: ['hobbit.jpg'],
+      created_at: new Date(),
     },
     {
       id: 8,
@@ -87,6 +95,7 @@ export class PropertyService {
       description: 'Történelmi épület, hatalmas birtokkal.',
       roomCount: 20,
       images: ['kastely.jpg'],
+      created_at: new Date(),
     },
     {
       id: 9,
@@ -97,6 +106,7 @@ export class PropertyService {
       description: 'Tökéletes menedék a városi élet elől.',
       roomCount: 2,
       images: ['erdeihaz.jpg'],
+      created_at: new Date(),
     },
     {
       id: 10,
@@ -107,6 +117,7 @@ export class PropertyService {
       description: 'Modern dizájn és hatalmas terek.',
       roomCount: 2,
       images: ['loft.webp'],
+      created_at: new Date(),
     },
     {
       id: 11,
@@ -117,6 +128,7 @@ export class PropertyService {
       description: 'Kilátás a havas csúcsokra.',
       roomCount: 3,
       images: ['fahaz.jpg'],
+      created_at: new Date(),
     },
     {
       id: 12,
@@ -127,6 +139,7 @@ export class PropertyService {
       description: 'Üvegfalak és luxus mindenhol.',
       roomCount: 10,
       images: ['glasshouse.jpg'],
+      created_at: new Date(),
     },
     {
       id: 13,
@@ -137,6 +150,7 @@ export class PropertyService {
       description: 'Egyedi lakhatás egy szélmalomban.',
       roomCount: 4,
       images: ['szelmalom.jpg'],
+      created_at: new Date(),
     },
     {
       id: 14,
@@ -147,6 +161,7 @@ export class PropertyService {
       description: 'Fiataloknak tökéletes belvárosi lakás.',
       roomCount: 1,
       images: ['studio.jpg'],
+      created_at: new Date(),
     },
     {
       id: 15,
@@ -157,6 +172,7 @@ export class PropertyService {
       description: 'Homokvihar álló technológia.',
       roomCount: 6,
       images: ['dunehouse.jpg'],
+      created_at: new Date(),
     },
     {
       id: 16,
@@ -167,6 +183,7 @@ export class PropertyService {
       description: 'Luxus élet a csillagok között.',
       roomCount: 15,
       images: ['spacestation.jpg'],
+      created_at: new Date(),
     },
     {
       id: 17,
@@ -177,6 +194,7 @@ export class PropertyService {
       description: 'Falusi nyugalom és tornácos ház.',
       roomCount: 3,
       images: ['paraszthaz.jpg'],
+      created_at: new Date(),
     },
     {
       id: 18,
@@ -187,6 +205,7 @@ export class PropertyService {
       description: 'Hatalmas medence és luxus.',
       roomCount: 7,
       images: ['luxvilla.jpg'],
+      created_at: new Date(),
     },
     {
       id: 19,
@@ -197,6 +216,7 @@ export class PropertyService {
       description: 'Ókori építészet modern kényelemmel.',
       roomCount: 25,
       images: ['palace.jpg'],
+      created_at: new Date(),
     },
     {
       id: 20,
@@ -207,6 +227,7 @@ export class PropertyService {
       description: 'Mobil otthon a világ bármely pontján.',
       roomCount: 1,
       images: ['lakokocsi.webp'],
+      created_at: new Date(),
     },
   ]);
   public properties$ = this.propertiesSubject$.asObservable();
@@ -236,6 +257,12 @@ export class PropertyService {
         return false;
       }
     });
+  }
+
+  getPropertyById(id: number): Observable<Property | undefined> {
+    return this.properties$.pipe(
+      map((properties) => properties.find((property) => property.id === id))
+    );
   }
 
   paginateProperties(pageIndex: number, pageSize: number): Property[] {

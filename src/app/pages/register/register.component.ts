@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorSnackbarComponent } from '../../components/error-snackbar/error-snackbar.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 @Component({
@@ -34,7 +34,11 @@ export class RegisterComponent {
   snackBarRef = inject(MatSnackBar);
   @Input() durationInSeconds = 5;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
@@ -71,8 +75,13 @@ export class RegisterComponent {
       role: this.registerForm.value.role,
       password_hashed: this.registerForm.value.password,
     };
-    this.authService.register(user).subscribe((user) => {
-      console.log(user);
+    this.authService.register(user).subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.openErrorSnackbar(err.message || 'Regisztráció sikertelen');
+      },
     });
   }
 

@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { MaterialModule } from '../../modules/material.module';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PropertyCardComponent } from '../../components/property-card/property-card.component';
 import { PropertyService } from '../../services/property.service';
 import { Observable } from 'rxjs';
 import { Property } from '../../models/property.model';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgStyle } from '@angular/common';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -20,14 +21,23 @@ import { FooterComponent } from '../../components/footer/footer.component';
     PropertyCardComponent,
     AsyncPipe,
     FooterComponent,
+    NgStyle,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
   properties$: Observable<Property[]>;
-  constructor(private propertyService: PropertyService) {
+  authService = inject(AuthService);
+  constructor(
+    private propertyService: PropertyService,
+    private router: Router
+  ) {
     this.properties$ = this.propertyService.properties$;
-    //console.log(this.properties$);
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

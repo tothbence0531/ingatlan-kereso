@@ -26,7 +26,7 @@ export class PropertyListComponent implements OnInit {
   properties$: Observable<Property[]>;
   filteredProperties!: Property[];
   paginatedProperties!: Property[];
-  pageSize = 5;
+  pageSize = 8;
   pageIndex = 0;
 
   constructor(private propertyService: PropertyService) {

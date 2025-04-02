@@ -18,6 +18,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatRippleModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const MATERIAL_MODULES = [
   MatButtonModule,
@@ -38,6 +40,8 @@ const MATERIAL_MODULES = [
   MatSnackBarAction,
   MatCheckboxModule,
   MatRadioModule,
+  MatRippleModule,
+  MatTooltipModule,
 ];
 
 @NgModule({

@@ -12,7 +12,13 @@
     <li routerLink="/about"><mat-icon>info</mat-icon></li>
   </ul>
 
+  @if (authService.isAuthenticated()) {
+  <button class="primary-button" mat-raised-button (click)="logout()">
+    Kijelentkezés
+  </button>
+  } @else {
   <button class="primary-button" mat-raised-button routerLink="/login">
     Bejelentkezés
   </button>
+  }
 </nav>

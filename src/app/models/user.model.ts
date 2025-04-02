@@ -3,6 +3,10 @@ export interface User {
   name: string;
   email: string;
   role: string;
-  password_hashed?: string;
-  savedProperties?: string[];
+  salt?: string; // TODO: implement salt
+  password_hashed: string; // TODO: change to bcrypt
+  created_at?: Date;
+  lastLogin?: Date;
+  savedProperties?: string[]; // TODO: implement savedProperties
+  profilePicture?: string; // TODO: implement profilePicture
 }
