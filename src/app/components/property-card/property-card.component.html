@@ -1,6 +1,10 @@
 <main>
   <div class="image-container">
+    @if (property.images[0] != null) {
     <img appLazyLoad="/assets/{{ property.images[0] }}" alt="property-image" />
+    } @else {
+    <img appLazyLoad="/assets/missing-image.jpg" alt="property-image" />
+    }
   </div>
   <div class="details">
     <p class="__location">

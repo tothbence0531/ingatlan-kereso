@@ -59,9 +59,10 @@ export class PropertyService {
       type: 'Villa',
       price: 250_000_000,
       location: 'Balatonfüred',
-      description: 'Lenyűgöző panoráma és saját strand.',
+      description:
+        'Az A- Villa (Vendégház) légkondicionált szállással, valamint fürdő- és wellnessközponttal várja vendégeit Balatonfüreden, a tihanyi apátságtól 8,4 km-re, az Annagora Aquaparktól pedig 2,4 km-re. Az erkélyes szálláshely ingyenes wifit és díjmentes magánparkolót kínál. A villa tóra néző medencével, szaunával és közös konyhával rendelkezik. Az 5 hálószobás, tágas villában 3 fürdőszoba, ágyneműhuzat és törölköző, streamingszolgáltatást kínáló, síkképernyős tévé, étkezősarok, teljesen felszerelt konyha található. A terasz a hegyekre nyújt kilátást. A vendégek a medencére néző, szabadtéri étkezősarokban is étkezhetnek. A zavartalan pihenést külön bejárat is szolgálja.A beltéri medencében és a pezsgőfürdőben kellemes lazításra nyílik lehetőség. A villakomplexumhoz szabadtéri tűzrakóhely és piknikezőterület is tartozik.Balatonfüred vasútállomása 2,4 km-re, a tihanyi Belső-tó pedig 10 km-re van az épülettől. A legközelebbi reptér a 76 km-re fekvő Hévíz–Balaton repülőtér.',
       roomCount: 8,
-      images: ['balatonvilla.jpg'],
+      images: ['balatonvilla.jpg', 'balatonvilla2.jpg', 'balatonvilla3.jpg'],
       created_at: new Date(),
     },
     {

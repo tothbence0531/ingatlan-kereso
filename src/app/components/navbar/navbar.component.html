@@ -13,12 +13,12 @@
   </ul>
 
   @if (authService.isAuthenticated()) {
-  <button class="primary-button" mat-raised-button (click)="logout()">
+  <a class="primary-button" mat-raised-button (click)="logout()">
     Kijelentkezés
-  </button>
+  </a>
   } @else {
-  <button class="primary-button" mat-raised-button routerLink="/login">
+  <a class="primary-button" mat-raised-button routerLink="/login">
     Bejelentkezés
-  </button>
+  </a>
   }
 </nav>

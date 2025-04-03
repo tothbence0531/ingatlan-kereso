@@ -10,7 +10,9 @@
     </p>
     <div class="col-lg-8 col-12 img-container">
       <div class="image-actions">
-        <button mat-flat-button>Időpontfoglalás</button>
+        <button autofocus (click)="openDialog()" mat-flat-button>
+          Időpontfoglalás
+        </button>
         <mat-icon
           matRipple
           matTooltip="Kedvencekhez adás"
@@ -26,16 +28,31 @@
     </div>
 
     <div class="col-lg-4 col-12 more-images-container">
+      @if (property.images[1] != null) {
       <img
         class=""
-        src="/assets/{{ property.images[0] }}"
-        alt="property-image:{{ property.id }}"
+        src="/assets/{{ property.images[1] }}"
+        alt="property-image:{{ property.id }}1"
       />
+      } @else {
       <img
         class=""
-        src="/assets/{{ property.images[0] }}"
-        alt="property-image:{{ property.id }}"
+        src="/assets/missing-image.jpg"
+        alt="property-image:{{ property.id }}2"
       />
+      } @if (property.images[2] != null) {
+      <img
+        class=""
+        src="/assets/{{ property.images[2] }}"
+        alt="property-image:{{ property.id }}3"
+      />
+      } @else {
+      <img
+        class=""
+        src="/assets/missing-image.jpg"
+        alt="property-image:{{ property.id }}2"
+      />
+      }
     </div>
 
     <div class="col-md-6 col-12 details-container">
