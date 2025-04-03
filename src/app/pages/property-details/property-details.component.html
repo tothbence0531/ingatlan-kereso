@@ -2,6 +2,84 @@
   <app-navbar></app-navbar>
 </div>
 
+<div class="hidden modal">
+  <div (click)="closeModal()" class="modal-backdrop"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Időpontfoglalás</h2>
+      <button mat-ripple class="close-button" (click)="closeModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <mat-stepper [linear]="true">
+        <mat-step editable="true" [completed]="dateFormGroup.valid">
+          <form [formGroup]="dateFormGroup">
+            <ng-template matStepLabel>Dátum</ng-template>
+            <mat-form-field appearance="fill" class="date-field">
+              <mat-label>Válasszon dátumot</mat-label>
+              <input
+                formControlName="date"
+                matInput
+                [matDatepicker]="datepicker"
+              />
+              @if (this.dateFormGroup.get('date')?.hasError('required')) {
+              <mat-error>Kérem válasszon egy dátumot</mat-error>
+              }
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="datepicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #datepicker></mat-datepicker>
+            </mat-form-field>
+          </form>
+          <div class="stepper-buttons">
+            <button mat-button matStepperNext>Következő</button>
+          </div>
+        </mat-step>
+        <mat-step editable="true" [completed]="timeFormGroup.valid">
+          <form [formGroup]="timeFormGroup">
+            <ng-template matStepLabel>Időpont</ng-template>
+            <mat-form-field appearance="fill">
+              <mat-label>Időpont választás</mat-label>
+              <input
+                matInput
+                formControlName="time"
+                [matTimepicker]="timePicker"
+              />
+              <mat-icon matSuffix>access_time</mat-icon>
+              <mat-timepicker #timePicker></mat-timepicker>
+            </mat-form-field>
+          </form>
+          <div class="stepper-buttons">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext [disabled]="!timeFormGroup.valid">
+              Next
+            </button>
+          </div>
+        </mat-step>
+        <mat-step editable="true">
+          <ng-template matStepLabel>Összegzés</ng-template>
+          <p>Kiválasztott időpont:</p>
+          <p>
+            Dátum:
+            {{ dateFormGroup.get("date")?.value | date : "yyyy.MM.dd" }}
+          </p>
+          <p>
+            Idő:
+            {{ timeFormGroup.get("time")?.value | date : "HH:mm" }}
+          </p>
+          <div class="stepper-buttons">
+            <button mat-button (click)="submitAppointment()">
+              Véglegesítés
+            </button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <div class="card row">
     <h1>{{ property.title }}</h1>
@@ -10,9 +88,7 @@
     </p>
     <div class="col-lg-8 col-12 img-container">
       <div class="image-actions">
-        <button autofocus (click)="openDialog()" mat-flat-button>
-          Időpontfoglalás
-        </button>
+        <button (click)="openModal()" mat-flat-button>Időpontfoglalás</button>
         <mat-icon
           matRipple
           matTooltip="Kedvencekhez adás"

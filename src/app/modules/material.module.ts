@@ -5,6 +5,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
   MatSnackBarAction,
   MatSnackBarActions,
@@ -24,9 +26,11 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatRippleModule } from '@angular/material/core';
+import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 const MATERIAL_MODULES = [
   MatButtonModule,
@@ -57,6 +61,11 @@ const MATERIAL_MODULES = [
   MatDialogContent,
   MatDialogActions,
   MatDialogClose,
+  MatStepperModule,
+  MatDatepickerModule,
+  MatTimepickerModule,
+  MatNativeDateModule,
+  NgxMaterialTimepickerModule,
 ];
 
 @NgModule({
