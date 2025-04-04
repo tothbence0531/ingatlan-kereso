@@ -1,4 +1,4 @@
-@import "../../../styles.scss";
+@use "../../../styles.scss" as *;
 .slider-container {
   display: flex;
   flex-direction: column;

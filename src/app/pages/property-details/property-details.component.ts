@@ -1,18 +1,11 @@
-import {
-  Component,
-  inject,
-  model,
-  OnInit,
-  Signal,
-  signal,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 import { Property } from '../../models/property.model';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { MaterialModule } from '../../modules/material.module';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { TruncatedTextComponent } from '../../components/truncated-text/truncated-text.component';
 import { AuthService } from '../../services/auth.service';
 import {
@@ -24,8 +17,11 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { Observable } from 'rxjs';
 import { User } from '../../models/user.model';
+import { map, Observable } from 'rxjs';
+import { StepperOrientation } from '@angular/material/stepper';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { AppointmentService } from '../../services/appointment.service';
 
 @Component({
   selector: 'app-property-details',
@@ -39,6 +35,7 @@ import { User } from '../../models/user.model';
     FormsModule,
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
+    AsyncPipe,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './property-details.component.html',
@@ -49,13 +46,16 @@ export class PropertyDetailsComponent implements OnInit {
   dateFormGroup: FormGroup;
   timeFormGroup: FormGroup;
   currentUser: User | null;
+  stepperOrientation: Observable<StepperOrientation>;
 
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
     private propertyService: PropertyService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private appointmentService: AppointmentService,
+    private breakpointObserver: BreakpointObserver
   ) {
     this.dateFormGroup = this.fb.group({
       date: ['', Validators.required],
@@ -66,6 +66,10 @@ export class PropertyDetailsComponent implements OnInit {
     });
 
     this.currentUser = this.authService.currentUserSignal();
+
+    this.stepperOrientation = breakpointObserver
+      .observe('(min-width: 530px)')
+      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
   }
 
   ngOnInit(): void {
@@ -116,13 +120,14 @@ export class PropertyDetailsComponent implements OnInit {
     if (
       this.dateFormGroup.valid &&
       this.timeFormGroup.valid &&
-      this.authService.isAuthenticated()
+      this.authService.isAuthenticated() &&
+      this.currentUser
     ) {
       const dateValue = this.dateFormGroup.get('date')?.value;
       const timeValue = this.timeFormGroup.get('time')?.value;
 
       if (!dateValue || !timeValue) {
-        console.error('Hiányzó dátum vagy idő érték');
+        console.log('Hiányzó dátum vagy idő érték');
         return;
       }
 
@@ -145,8 +150,12 @@ export class PropertyDetailsComponent implements OnInit {
       date.setHours(hours);
       date.setMinutes(minutes);
 
-      //console.log('Egyesített dátum-idő:', date);
-      //console.log('User: ', this.currentUser);
+      this.appointmentService.addAppointment({
+        userId: this.currentUser.id,
+        propertyId: this.property.id,
+        date: date,
+      });
+
       const modal = document.querySelector('.modal');
       modal?.classList.add('hidden');
     } else {

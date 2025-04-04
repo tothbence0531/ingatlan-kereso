@@ -12,7 +12,10 @@
       </button>
     </div>
     <div class="modal-body">
-      <mat-stepper [linear]="true">
+      <mat-stepper
+        [linear]="true"
+        [orientation]="(stepperOrientation | async)!"
+      >
         <mat-step editable="true" [completed]="dateFormGroup.valid">
           <form [formGroup]="dateFormGroup">
             <ng-template matStepLabel>Dátum</ng-template>
@@ -52,15 +55,15 @@
             </mat-form-field>
           </form>
           <div class="stepper-buttons">
-            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperPrevious>Előző</button>
             <button mat-button matStepperNext [disabled]="!timeFormGroup.valid">
-              Next
+              Következő
             </button>
           </div>
         </mat-step>
         <mat-step editable="true">
           <ng-template matStepLabel>Összegzés</ng-template>
-          <p>Kiválasztott időpont:</p>
+          <p class="overview-header">Kiválasztott időpont:</p>
           <p>
             Dátum:
             {{ dateFormGroup.get("date")?.value | date : "yyyy.MM.dd" }}
@@ -70,6 +73,7 @@
             {{ timeFormGroup.get("time")?.value | date : "HH:mm" }}
           </p>
           <div class="stepper-buttons">
+            <button mat-button matStepperPrevious>Vissza</button>
             <button mat-button (click)="submitAppointment()">
               Véglegesítés
             </button>
