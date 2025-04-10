@@ -1,11 +1,34 @@
 <main>
   <div class="image-container">
+    <!-- Fő kép -->
     @if (property.images[0] != null) {
-    <img appLazyLoad="/assets/{{ property.images[0] }}" alt="property-image" />
+    <img
+      class="main-img"
+      #mainImage
+      appLazyLoad="/assets/{{ property.images[0] }}"
+      alt="property-image"
+    />
     } @else {
-    <img appLazyLoad="/assets/missing-image.jpg" alt="property-image" />
+    <img
+      class="main-img"
+      #mainImage
+      appLazyLoad="/assets/missing-image.jpg"
+      alt="property-image"
+    />
     }
+
+    <div class="thumbnails-container">
+      @for (item of property.images; track $index) { @if ($index < 5) {
+      <img
+        class="thumbnail"
+        appLazyLoad="/assets/{{ property.images[$index] }}"
+        alt="thumbnail-{{ $index }}"
+        (mouseenter)="changeMainImage(property.images[$index])"
+      />
+      } }
+    </div>
   </div>
+
   <div class="details">
     <p class="__location">
       <mat-icon>location_on</mat-icon>

@@ -1,4 +1,4 @@
-import { Component, input, Input } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { Property } from '../../models/property.model';
 import { MaterialModule } from '../../modules/material.module';
 import { CurrencyPipe } from '@angular/common';
@@ -20,4 +20,11 @@ import { RouterLink } from '@angular/router';
 })
 export class PropertyCardComponent {
   @Input() property!: Property;
+  @ViewChild('mainImage') mainImage!: ElementRef<HTMLImageElement>;
+
+  changeMainImage(imagePath: string) {
+    if (this.mainImage) {
+      this.mainImage.nativeElement.src = `/assets/${imagePath}`;
+    }
+  }
 }
