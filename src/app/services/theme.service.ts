@@ -15,5 +15,11 @@ export class ThemeService {
   setTheme(theme: string) {
     document.documentElement.setAttribute('data-theme', theme);
     this.themeSubject.next(theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  toggleTheme() {
+    const currentTheme = this.getInitialTheme();
+    this.setTheme(currentTheme === 'light' ? 'dark' : 'light');
   }
 }

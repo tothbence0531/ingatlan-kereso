@@ -21,7 +21,6 @@ import { AuthService } from '../../services/auth.service';
     PropertyCardComponent,
     AsyncPipe,
     FooterComponent,
-    NgStyle,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

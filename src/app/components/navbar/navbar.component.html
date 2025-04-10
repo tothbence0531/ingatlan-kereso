@@ -10,15 +10,60 @@
     <li routerLink="/"><mat-icon>home</mat-icon></li>
     <li routerLink="/properties"><mat-icon>search</mat-icon></li>
     <li routerLink="/about"><mat-icon>info</mat-icon></li>
+    <!-- <li [routerLink]="authService.isAuthenticated() ? '/profile' : '/login'">
+      <mat-icon>account_circle</mat-icon>
+    </li> -->
   </ul>
 
-  @if (authService.isAuthenticated()) {
-  <a class="primary-button" mat-raised-button (click)="logout()">
+  <!-- @if (authService.isAuthenticated()) {
+  <a class="menu-button" mat-raised-button (click)="logout()">
     Kijelentkezés
   </a>
   } @else {
-  <a class="primary-button" mat-raised-button routerLink="/login">
+  <a class="menu-button" mat-raised-button routerLink="/login">
     Bejelentkezés
-  </a>
-  }
+  </a> 
+  }-->
+
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    class="menu-button"
+    aria-label="Example icon-button with a menu"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu" xPosition="before">
+    @if (authService.isAuthenticated()) {
+    <button mat-menu-item routerLink="/profile">
+      <mat-icon>account_circle</mat-icon>
+      <span>Profil</span>
+    </button>
+    } @else {
+    <button mat-menu-item routerLink="/login">
+      <mat-icon>account_circle</mat-icon>
+      <span>Bejelentkezés</span>
+    </button>
+    }
+    <button
+      mat-menu-item
+      (click)="themeService.toggleTheme(); $event.stopPropagation()"
+    >
+      @if ((themeService.theme$ | async) == 'dark') {
+      <mat-icon>light_mode</mat-icon>
+      } @else {
+      <mat-icon>dark_mode</mat-icon>
+      } @if ((themeService.theme$ | async) == 'dark') {
+      <span>Világos mód</span>
+      } @else {
+      <span>Sötét mód</span>
+      }
+    </button>
+    @if (authService.isAuthenticated()) {
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Kijelentkezés</span>
+    </button>
+    }
+  </mat-menu>
 </nav>

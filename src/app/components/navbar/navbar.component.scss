@@ -1,3 +1,5 @@
+@use "../../../styles.scss" as *;
+
 nav {
   display: flex;
   flex-direction: row;
@@ -78,22 +80,27 @@ nav {
       }
     }
   }
+
+  .menu-button {
+    color: $on-primary-color;
+  }
 }
 
 .icon-links {
   li {
     display: flex !important;
+    padding: 0.5rem !important;
   }
   display: flex !important;
 }
 
-@media screen and (max-width: 768px) {
+/*@media screen and (max-width: 768px) {
   nav {
-    .primary-button {
+    .menu-button {
       display: none;
     }
   }
-}
+}*/
 
 @media screen and (max-width: 579px) {
   .text-links {

@@ -31,9 +31,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatMenuModule } from '@angular/material/menu';
 
 const MATERIAL_MODULES = [
   MatButtonModule,
+  MatMenuModule,
   MatCardModule,
   MatToolbarModule,
   MatIconModule,

@@ -53,7 +53,7 @@ export class DetailedSearchbarComponent implements OnInit {
     });
   }
 
-  loadFilterOptions() {
+  async loadFilterOptions() {
     this.typeFilterOptions = this.detailedSearchForm
       .get('type')!
       .valueChanges.pipe(
