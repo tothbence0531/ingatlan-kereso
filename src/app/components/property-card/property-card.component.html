@@ -8,6 +8,7 @@
     <img
       class="main-img"
       #mainImage
+      loading="lazy"
       [class.loaded]="!mainImageLoading"
       (load)="mainImageLoading = false"
       appLazyLoad="/assets/property-images/{{ property.images[0] }}"
@@ -16,6 +17,7 @@
     } @else {
     <img
       class="main-img"
+      loading="lazy"
       (load)="mainImageLoading = false"
       #mainImage
       [class.loaded]="!mainImageLoading"
@@ -27,6 +29,7 @@
     <div class="thumbnails-container">
       @for (item of property.images; track $index) { @if ($index < 5) {
       <img
+        loading="lazy"
         [class.loaded]="!mainImageLoading"
         class="thumbnail"
         appLazyLoad="/assets/property-images/{{ property.images[$index] }}"
