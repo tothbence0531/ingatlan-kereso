@@ -21,10 +21,11 @@ import { RouterLink } from '@angular/router';
 export class PropertyCardComponent {
   @Input() property!: Property;
   @ViewChild('mainImage') mainImage!: ElementRef<HTMLImageElement>;
+  mainImageLoading = true;
 
   changeMainImage(imagePath: string) {
     if (this.mainImage) {
-      this.mainImage.nativeElement.src = `/assets/${imagePath}`;
+      this.mainImage.nativeElement.src = `/assets/property-images/${imagePath}`;
     }
   }
 }

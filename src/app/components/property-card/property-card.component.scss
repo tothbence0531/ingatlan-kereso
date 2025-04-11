@@ -66,6 +66,13 @@ main {
     height: 250px;
     background: $surface-container-color;
 
+    .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
     &:hover {
       .thumbnails-container {
         opacity: 1;
@@ -74,10 +81,15 @@ main {
       }
     }
 
+    .loaded {
+      opacity: 1 !important;
+    }
+
     .main-img {
       object-fit: cover;
       height: 250px;
       width: 100%;
+      opacity: 0;
       transition: opacity 0.3s ease;
     }
 
@@ -94,6 +106,7 @@ main {
     }
 
     .thumbnail {
+      opacity: 0;
       width: 40px;
       height: 40px;
       object-fit: cover;

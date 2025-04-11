@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 import { Property } from '../../models/property.model';
@@ -18,10 +18,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { User } from '../../models/user.model';
-import { map, Observable } from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 import { StepperOrientation } from '@angular/material/stepper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AppointmentService } from '../../services/appointment.service';
+import { Lightbox, IAlbum, LightboxEvent, LIGHTBOX_EVENT } from 'ngx-lightbox';
+import { LightboxModule } from 'ngx-lightbox';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-property-details',
@@ -36,6 +39,7 @@ import { AppointmentService } from '../../services/appointment.service';
     ReactiveFormsModule,
     NgxMaterialTimepickerModule,
     AsyncPipe,
+    LightboxModule,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './property-details.component.html',
@@ -47,6 +51,11 @@ export class PropertyDetailsComponent implements OnInit {
   timeFormGroup: FormGroup;
   currentUser: User | null;
   stepperOrientation: Observable<StepperOrientation>;
+  private _album: IAlbum[] = [];
+  lightboxOpened = false;
+  resizeTimeout: any;
+  private lightboxSubscription?: Subscription;
+  currentLightboxImageIndex = 0;
 
   constructor(
     private authService: AuthService,
@@ -55,7 +64,9 @@ export class PropertyDetailsComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private lightbox: Lightbox,
+    private lightboxEvent: LightboxEvent
   ) {
     this.dateFormGroup = this.fb.group({
       date: ['', Validators.required],
@@ -83,6 +94,7 @@ export class PropertyDetailsComponent implements OnInit {
       .subscribe((property) => {
         if (property) {
           this.property = property;
+          this.initAlbum();
         } else {
           this.router.navigate(['/not-found']);
         }
@@ -161,5 +173,65 @@ export class PropertyDetailsComponent implements OnInit {
     } else {
       console.log('A érvénytelen időpontfoglalás');
     }
+  }
+
+  initAlbum() {
+    this._album = [];
+    for (let i = 0; i < this.property.images.length; i++) {
+      this._album.push({
+        src: `/assets/property-images/${this.property.images[i]}`,
+        thumb: `/assets/property-images/${this.property.images[i]}`,
+      });
+    }
+  }
+
+  openLightbox(index: number) {
+    this.currentLightboxImageIndex = index;
+    this.lightboxSubscription = this.lightboxEvent.lightboxEvent$.subscribe(
+      (event: any) => {
+        if (event.id === LIGHTBOX_EVENT.CLOSE) {
+          //console.log('closed');
+          this.lightboxOpened = false;
+          this.lightboxSubscription?.unsubscribe();
+        }
+        if (event.id === LIGHTBOX_EVENT.CHANGE_PAGE) {
+          //console.log(event.data);
+          this.currentLightboxImageIndex = event.data;
+        }
+
+        if (event.id === LIGHTBOX_EVENT.OPEN) {
+          //console.log('opened');
+          this.lightboxOpened = true;
+        }
+      }
+    );
+    this.lightbox.open(this._album, this.currentLightboxImageIndex, {
+      resizeDuration: 0.4,
+      fadeDuration: 0.3,
+      showImageNumberLabel: true,
+      disableScrolling: true,
+      centerVertically: true,
+      albumLabel: '%1. kép a(z) %2-ből',
+      showDownloadButton: true,
+    });
+    this.lightboxOpened = true;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    //console.log(this.lightboxOpened);
+    if (this.lightboxOpened) {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(() => {
+        this.reloadLightbox();
+      }, 100);
+    }
+  }
+
+  private reloadLightbox() {
+    //console.log('before: ', this.lightboxOpened);
+    this.lightbox.close();
+    this.openLightbox(this.currentLightboxImageIndex);
+    //console.log('after: ', this.lightboxOpened);
   }
 }

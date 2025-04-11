@@ -32,9 +32,11 @@ import { FormsModule } from '@angular/forms';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const MATERIAL_MODULES = [
   MatButtonModule,
+  MatProgressSpinnerModule,
   MatMenuModule,
   MatCardModule,
   MatToolbarModule,

@@ -102,8 +102,9 @@
       </div>
 
       <img
-        src="/assets/{{ property.images[0] }}"
+        src="/assets/property-images/{{ property.images[0] }}"
         alt="property-image:{{ property.id }}"
+        (click)="openLightbox(0)"
       />
     </div>
 
@@ -111,8 +112,9 @@
       @if (property.images[1] != null) {
       <img
         class=""
-        src="/assets/{{ property.images[1] }}"
+        src="/assets/property-images/{{ property.images[1] }}"
         alt="property-image:{{ property.id }}1"
+        (click)="openLightbox(1)"
       />
       } @else {
       <img
@@ -123,7 +125,8 @@
       } @if (property.images[2] != null) {
       <img
         class=""
-        src="/assets/{{ property.images[2] }}"
+        src="/assets/property-images/{{ property.images[2] }}"
+        (click)="openLightbox(2)"
         alt="property-image:{{ property.id }}3"
       />
       } @else {

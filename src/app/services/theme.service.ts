@@ -9,7 +9,7 @@ export class ThemeService {
   theme$ = this.themeSubject.asObservable();
 
   private getInitialTheme(): string {
-    return document.documentElement.getAttribute('data-theme') || 'light';
+    return document.documentElement.getAttribute('data-theme') || 'dark';
   }
 
   setTheme(theme: string) {

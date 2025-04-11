@@ -1,17 +1,24 @@
 <main>
   <div class="image-container">
+    @if (mainImageLoading) {
+    <mat-spinner class="spinner" diameter="50" color="primary"> </mat-spinner>
+    }
     <!-- Fő kép -->
     @if (property.images[0] != null) {
     <img
       class="main-img"
       #mainImage
-      appLazyLoad="/assets/{{ property.images[0] }}"
+      [class.loaded]="!mainImageLoading"
+      (load)="mainImageLoading = false"
+      appLazyLoad="/assets/property-images/{{ property.images[0] }}"
       alt="property-image"
     />
     } @else {
     <img
       class="main-img"
+      (load)="mainImageLoading = false"
       #mainImage
+      [class.loaded]="!mainImageLoading"
       appLazyLoad="/assets/missing-image.jpg"
       alt="property-image"
     />
@@ -20,8 +27,9 @@
     <div class="thumbnails-container">
       @for (item of property.images; track $index) { @if ($index < 5) {
       <img
+        [class.loaded]="!mainImageLoading"
         class="thumbnail"
-        appLazyLoad="/assets/{{ property.images[$index] }}"
+        appLazyLoad="/assets/property-images/{{ property.images[$index] }}"
         alt="thumbnail-{{ $index }}"
         (mouseenter)="changeMainImage(property.images[$index])"
       />
