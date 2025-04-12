@@ -14,6 +14,7 @@ import { OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   themeService = inject(ThemeService);
+  title = 'ingatlan-kereso';
 
   ngOnInit(): void {
     const storageTheme = localStorage.getItem('theme');
