@@ -34,7 +34,7 @@
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu" xPosition="before">
-    @if (authService.isAuthenticated()) {
+    @if (authService.isAuthenticated() | async) {
     <button mat-menu-item routerLink="/profile">
       <mat-icon>account_circle</mat-icon>
       <span>Profil</span>
@@ -59,7 +59,7 @@
       <span>Sötét mód</span>
       }
     </button>
-    @if (authService.isAuthenticated()) {
+    @if (authService.isAuthenticated() | async) {
     <button mat-menu-item (click)="logout()">
       <mat-icon>logout</mat-icon>
       <span>Kijelentkezés</span>

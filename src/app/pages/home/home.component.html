@@ -1,19 +1,17 @@
 <div class="top-wrapper">
   <app-navbar></app-navbar>
   <section class="container">
-    <!-- INFO: DEBUG 
     <div [ngStyle]="{ color: 'red', fontWeight: 'bold' }" class="debug">
       <p>DEBUG</p>
-      <p>isAuthenticated: {{ authService.isAuthenticated() }}</p>
-      <p>id: {{ authService.currentUserSignal()?.id }}</p>
+      <p>isAuthenticated: {{ authService.isAuthenticated() | async }}</p>
+      <!--      <p>id: {{ authService.currentUser?.id }}</p>
       <p>name: {{ authService.currentUserSignal()?.name }}</p>
       <p>role: {{ authService.currentUserSignal()?.role }}</p>
       <p>email: {{ authService.currentUserSignal()?.email }}</p>
       <p>
         saved properties: {{ authService.currentUserSignal()?.savedProperties }}
-      </p>
+      </p>-->
     </div>
-    -->
 
     <div class="header-row row">
       <div class="col-lg-4 col-md-12 banner-text-container">

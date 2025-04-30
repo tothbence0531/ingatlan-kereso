@@ -7,9 +7,10 @@ import { PropertyCardComponent } from '../../components/property-card/property-c
 import { PropertyService } from '../../services/property.service';
 import { Observable } from 'rxjs';
 import { Property } from '../../models/property.model';
-import { AsyncPipe, NgStyle } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { AuthService } from '../../services/auth.service';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +22,7 @@ import { AuthService } from '../../services/auth.service';
     PropertyCardComponent,
     AsyncPipe,
     FooterComponent,
+    NgStyle,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -28,15 +30,7 @@ import { AuthService } from '../../services/auth.service';
 export class HomeComponent {
   properties$: Observable<Property[]>;
   authService = inject(AuthService);
-  constructor(
-    private propertyService: PropertyService,
-    private router: Router
-  ) {
+  constructor(private propertyService: PropertyService) {
     this.properties$ = this.propertyService.properties$;
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/']);
   }
 }

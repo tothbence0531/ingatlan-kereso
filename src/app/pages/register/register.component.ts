@@ -54,36 +54,7 @@ export class RegisterComponent {
     event.stopPropagation();
   }
 
-  onSubmit() {
-    if (this.registerForm.invalid) {
-      this.openErrorSnackbar('A beviteli adatok érvénytelenek!');
-      return;
-    } else if (
-      this.registerForm.value.password !== this.registerForm.value.rePassword
-    ) {
-      this.openErrorSnackbar('A jelszavak nem egyeznek!');
-      return;
-    }
-
-    const user: User = {
-      id: this.authService.generateId(),
-      name:
-        this.registerForm.value.firstName +
-        ' ' +
-        this.registerForm.value.lastName,
-      email: this.registerForm.value.email,
-      role: this.registerForm.value.role,
-      password_hashed: this.registerForm.value.password,
-    };
-    this.authService.register(user).subscribe({
-      next: () => {
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        this.openErrorSnackbar(err.message || 'Regisztráció sikertelen');
-      },
-    });
-  }
+  onSubmit() {}
 
   openErrorSnackbar(message: string) {
     this.snackBarRef.openFromComponent(ErrorSnackbarComponent, {

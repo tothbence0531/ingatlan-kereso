@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   Input,
+  OnDestroy,
   signal,
 } from '@angular/core';
 import { MaterialModule } from '../../modules/material.module';
@@ -14,6 +15,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -28,17 +30,17 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
   loginForm: FormGroup;
   hide = signal(true);
   snackBarRef = inject(MatSnackBar);
   @Input() durationInSeconds = 5;
+  authSubscription?: Subscription;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -53,22 +55,40 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.invalid) {
-      this.openErrorSnackbar('A beviteli adatok érvénytelenek!');
-      return;
+      this.openErrorSnackbar('Érvénytelen adatok');
+    } else {
+      const user = this.loginForm.value;
+      this.authService
+        .login(user.email, user.password)
+        .then((userCredential) => {
+          //console.log('login success');
+          this.router.navigateByUrl('/');
+        })
+        .catch((error) => {
+          console.log('error: ', error);
+          switch (error.code) {
+            case 'auth/user-not-found':
+              this.openErrorSnackbar(
+                'Felhasználó nem található a megadott e-mail címmel'
+              );
+              break;
+            case 'auth/wrong-password':
+              this.openErrorSnackbar('Hibás jelszó');
+              break;
+            case 'auth/invalid-credential':
+              this.openErrorSnackbar('Hibás felhasználónév vagy jelszó');
+              break;
+            case 'auth/too-many-requests':
+              this.openErrorSnackbar(
+                'Túl sokszor próbált bejelentkezni, próbálja meg később'
+              );
+              break;
+            default:
+              this.openErrorSnackbar('Váratlan hiba történt');
+              break;
+          }
+        });
     }
-    const user = this.loginForm.value;
-    this.authService
-      .login({ email: user.email, password: user.password })
-      .subscribe({
-        next: () => {
-          this.router.navigateByUrl(
-            this.route.snapshot.queryParams['returnUrl'] || '/'
-          );
-        },
-        error: (err) => {
-          this.openErrorSnackbar(err.message || 'Bejelentkezés sikertelen');
-        },
-      });
   }
 
   openErrorSnackbar(message: string) {
@@ -79,5 +99,9 @@ export class LoginComponent {
       horizontalPosition: 'right',
       data: message,
     });
+  }
+
+  ngOnDestroy() {
+    this.authSubscription?.unsubscribe();
   }
 }

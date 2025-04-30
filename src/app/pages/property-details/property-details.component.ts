@@ -17,7 +17,7 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { User } from '../../models/user.model';
+import { Auth, authState, User } from '@angular/fire/auth';
 import { map, Observable, Subscription } from 'rxjs';
 import { StepperOrientation } from '@angular/material/stepper';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -49,7 +49,7 @@ export class PropertyDetailsComponent implements OnInit {
   property!: Property;
   dateFormGroup: FormGroup;
   timeFormGroup: FormGroup;
-  currentUser: User | null;
+  currentUser: Observable<User | null>;
   stepperOrientation: Observable<StepperOrientation>;
   private _album: IAlbum[] = [];
   lightboxOpened = false;
@@ -66,7 +66,8 @@ export class PropertyDetailsComponent implements OnInit {
     private appointmentService: AppointmentService,
     private breakpointObserver: BreakpointObserver,
     private lightbox: Lightbox,
-    private lightboxEvent: LightboxEvent
+    private lightboxEvent: LightboxEvent,
+    private auth: Auth
   ) {
     this.dateFormGroup = this.fb.group({
       date: ['', Validators.required],
@@ -76,7 +77,7 @@ export class PropertyDetailsComponent implements OnInit {
       time: ['', Validators.required],
     });
 
-    this.currentUser = this.authService.currentUserSignal();
+    this.currentUser = authState(this.auth);
 
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 530px)')
@@ -163,7 +164,7 @@ export class PropertyDetailsComponent implements OnInit {
       date.setMinutes(minutes);
 
       this.appointmentService.addAppointment({
-        userId: this.currentUser.id,
+        userId: 'placeholder', // TODO: fix this
         propertyId: this.property.id,
         date: date,
       });
