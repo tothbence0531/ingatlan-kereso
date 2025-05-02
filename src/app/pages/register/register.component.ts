@@ -13,7 +13,6 @@ import { ErrorSnackbarComponent } from '../../components/error-snackbar/error-sn
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { Router, RouterLink } from '@angular/router';
-import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-register',
@@ -54,7 +53,39 @@ export class RegisterComponent {
     event.stopPropagation();
   }
 
-  onSubmit() {}
+  async onSubmit() {
+    if (this.registerForm.invalid) {
+      this.openErrorSnackbar('Kérjük, töltse ki az összes mezőt helyesen!');
+      return;
+    }
+
+    const { email, password, firstName, lastName, rePassword } =
+      this.registerForm.value;
+
+    try {
+      await this.authService.register(
+        email,
+        password,
+        firstName + ' ' + lastName
+      );
+      this.router.navigateByUrl('/login');
+    } catch (error: any) {
+      let errorMessage = 'Ismeretlen hiba történt a regisztráció során';
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage = 'Ez az email cím már használatban van';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'Érvénytelen email cím';
+          break;
+        case 'auth/weak-password':
+          errorMessage = 'A jelszó túl gyenge (legalább 6 karakter legyen)';
+          break;
+      }
+
+      this.openErrorSnackbar(errorMessage);
+    }
+  }
 
   openErrorSnackbar(message: string) {
     this.snackBarRef.openFromComponent(ErrorSnackbarComponent, {
