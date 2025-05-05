@@ -20,7 +20,7 @@ export class PropertyService {
   private loadProperties() {
     const properties = propertiesData.map((property) => ({
       ...property,
-      created_at: new Date(property.created_at),
+      created_at: property.created_at,
     }));
 
     this.propertiesSubject$.next(properties);

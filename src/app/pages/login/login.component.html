@@ -15,7 +15,8 @@
         />
         @if (this.loginForm.get('email')?.hasError('required')) {
         <mat-error>Email megadása kötelező</mat-error>
-        } @if (this.loginForm.get('email')?.hasError('email')) {
+        } @if (this.loginForm.get('email')?.hasError('email') ||
+        this.loginForm.get('email')?.hasError('pattern')) {
         <mat-error>Érvénytelen email cím</mat-error>
         }
       </mat-form-field>

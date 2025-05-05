@@ -7,5 +7,5 @@ export interface Property {
   description: string;
   roomCount: number;
   images: string[];
-  created_at: Date; // TODO: implement created_at
+  created_at: string; // TODO: implement created_at
 }

@@ -59,14 +59,21 @@ export class RegisterComponent {
       return;
     }
 
-    const { email, password, firstName, lastName, rePassword } =
+    const { email, password, firstName, lastName, rePassword, role } =
       this.registerForm.value;
+
+    if (password !== rePassword) {
+      this.openErrorSnackbar('A jelszavak nem egyeznek');
+      return;
+    }
 
     try {
       await this.authService.register(
         email,
         password,
-        firstName + ' ' + lastName
+        firstName,
+        lastName,
+        role
       );
       this.router.navigateByUrl('/login');
     } catch (error: any) {

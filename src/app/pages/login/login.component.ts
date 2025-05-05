@@ -43,7 +43,14 @@ export class LoginComponent implements OnDestroy {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email,
+          Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+        ],
+      ],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
@@ -65,27 +72,35 @@ export class LoginComponent implements OnDestroy {
           this.router.navigateByUrl('/');
         })
         .catch((error) => {
-          console.log('error: ', error);
-          switch (error.code) {
-            case 'auth/user-not-found':
-              this.openErrorSnackbar(
-                'Felhasználó nem található a megadott e-mail címmel'
-              );
-              break;
-            case 'auth/wrong-password':
-              this.openErrorSnackbar('Hibás jelszó');
-              break;
-            case 'auth/invalid-credential':
-              this.openErrorSnackbar('Hibás felhasználónév vagy jelszó');
-              break;
-            case 'auth/too-many-requests':
-              this.openErrorSnackbar(
-                'Túl sokszor próbált bejelentkezni, próbálja meg később'
-              );
-              break;
-            default:
-              this.openErrorSnackbar('Váratlan hiba történt');
-              break;
+          //console.error('Login error:', error);
+
+          if (error.code) {
+            switch (error.code) {
+              case 'auth/user-not-found':
+                this.openErrorSnackbar(
+                  'Felhasználó nem található a megadott e-mail címmel'
+                );
+                break;
+              case 'auth/wrong-password':
+                this.openErrorSnackbar('Hibás jelszó');
+                break;
+              case 'auth/invalid-credential':
+                this.openErrorSnackbar('Hibás felhasználónév vagy jelszó');
+                break;
+              case 'auth/too-many-requests':
+                this.openErrorSnackbar(
+                  'Túl sokszor próbált bejelentkezni, próbálja meg később'
+                );
+                break;
+              case 'auth/invalid-email':
+                this.openErrorSnackbar('Érvénytelen e-mail cím formátum');
+                break;
+              default:
+                this.openErrorSnackbar(`Hiba történt: ${error.code}`);
+                break;
+            }
+          } else {
+            this.openErrorSnackbar('Hálózati hiba vagy szerver probléma');
           }
         });
     }

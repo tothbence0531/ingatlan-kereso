@@ -3,14 +3,19 @@
   <section class="container">
     <div [ngStyle]="{ color: 'red', fontWeight: 'bold' }" class="debug">
       <p>DEBUG</p>
-      <p>isAuthenticated: {{ authService.isAuthenticated() | async }}</p>
-      <!--      <p>id: {{ authService.currentUser?.id }}</p>
-      <p>name: {{ authService.currentUserSignal()?.name }}</p>
-      <p>role: {{ authService.currentUserSignal()?.role }}</p>
-      <p>email: {{ authService.currentUserSignal()?.email }}</p>
       <p>
-        saved properties: {{ authService.currentUserSignal()?.savedProperties }}
-      </p>-->
+        isAuthenticated:
+        {{ (authService.isAuthenticated() | async) ? "true" : "false" }}
+      </p>
+      @if (currentUser) {
+      <p>firstname: {{ currentUser.name.first }}</p>
+      <p>lastname: {{ currentUser.name.last }}</p>
+      <p>role: {{ currentUser.role }}</p>
+      <p>email: {{ currentUser.email }}</p>
+      <p>saved properties: {{ currentUser.savedProperties }}</p>
+      <p>appointments: {{ currentUser.appointments }}</p>
+      <p>profilePicture: {{ currentUser.profilePicture }}</p>
+      }
     </div>
 
     <div class="header-row row">

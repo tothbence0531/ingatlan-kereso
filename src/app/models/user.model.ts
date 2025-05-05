@@ -1,10 +1,12 @@
-export interface User {
+export interface AppUser {
   uid: string;
-  name: string;
+  name: {
+    first: string;
+    last: string;
+  };
   email: string;
-  role: string;
-  created_at?: Date;
-  lastLogin?: Date;
+  role: 'buyer' | 'seller';
   savedProperties?: string[]; // TODO: implement savedProperties
+  appointments?: string[]; // TODO: implement appointments
   profilePicture?: string; // TODO: implement profilePicture
 }

@@ -1,6 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { User } from '@angular/fire/auth';
-import { delay, map, Observable, of } from 'rxjs';
+import { user, User } from '@angular/fire/auth';
+import { catchError, delay, from, map, Observable, of, switchMap } from 'rxjs';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -10,6 +10,10 @@ import {
 } from 'firebase/auth';
 import { Auth, authState } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { AppUser } from '../models/user.model';
+import { doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import { collection } from 'firebase/firestore';
+import { Firestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +21,16 @@ import { Router } from '@angular/router';
 export class AuthService {
   private currentUser$: Observable<User | null>;
 
-  constructor(private auth: Auth, private router: Router) {
+  constructor(
+    private auth: Auth,
+    private router: Router,
+    private firestore: Firestore
+  ) {
     this.currentUser$ = authState(this.auth);
   }
 
-  login(email: string, password: string): Promise<UserCredential> {
-    return signInWithEmailAndPassword(this.auth, email, password);
+  async login(email: string, password: string): Promise<UserCredential> {
+    return await signInWithEmailAndPassword(this.auth, email, password);
   }
 
   logout() {
@@ -34,7 +42,9 @@ export class AuthService {
   async register(
     email: string,
     password: string,
-    displayName: string
+    firstName: string,
+    lastName: string,
+    role: 'buyer' | 'seller'
   ): Promise<UserCredential> {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -43,11 +53,18 @@ export class AuthService {
         password
       );
 
-      if (userCredential.user) {
-        await updateProfile(userCredential.user, {
-          displayName: displayName,
-        });
-      }
+      this.createUserDocument(userCredential.user.uid, {
+        uid: userCredential.user.uid,
+        email: email,
+        name: {
+          first: firstName,
+          last: lastName,
+        },
+        role: role,
+        savedProperties: [],
+        appointments: [],
+        profilePicture: 'default.jpg',
+      });
 
       return userCredential;
     } catch (error) {
@@ -56,11 +73,46 @@ export class AuthService {
     }
   }
 
+  /**
+   * @returns an observable that emits the firebase auth user object
+   */
   getCurrentUser(): Observable<User | null> {
     return this.currentUser$;
   }
 
+  getCurrentUserData$(): Observable<AppUser | null> {
+    return this.currentUser$.pipe(
+      switchMap((user) => {
+        if (!user) return of(null);
+
+        return from(getDoc(doc(this.firestore, 'Users', user.uid))).pipe(
+          map((userDoc) => {
+            if (!userDoc.exists()) return null;
+
+            return {
+              uid: user.uid,
+              email: user.email || '',
+              ...userDoc.data(),
+            } as AppUser;
+          }),
+          catchError((error) => {
+            console.error('Error:', error);
+            return of(null);
+          })
+        );
+      })
+    );
+  }
+
   isAuthenticated(): Observable<User | null> {
     return this.currentUser$;
+  }
+
+  private async createUserDocument(
+    uid: string,
+    user: Partial<AppUser>
+  ): Promise<void> {
+    const userRef = doc(collection(this.firestore, 'Users'), uid);
+    return await setDoc(userRef, user);
   }
 }
