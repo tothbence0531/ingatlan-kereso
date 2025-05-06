@@ -1,0 +1,138 @@
+<div class="nav-wrapper">
+  <app-navbar></app-navbar>
+</div>
+
+<div class="container">
+  <h1 class="title">Új hirdetés hozzáadása</h1>
+  <form [formGroup]="newListingForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="inputs-wrapper col-8">
+        <mat-form-field appearance="outline">
+          <mat-label>Cím</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="pl.: Új lakás eladó..."
+            formControlName="title"
+          />
+          @if (this.newListingForm.get('title')?.hasError('required')) {
+          <mat-error>A hirdetés címének megadása kötelező</mat-error>
+          } @if (this.newListingForm.get('title')?.hasError('minlength')) {
+          <mat-error>Minimum 2 karakter hosszú cím szükséges</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Település</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="pl.: Budapest, Szeged, ..."
+            formControlName="location"
+          />
+          @if (this.newListingForm.get('location')?.hasError('required')) {
+          <mat-error>A település nevének megadása kötelező</mat-error>
+          } @if (this.newListingForm.get('location')?.hasError('minlength')) {
+          <mat-error
+            >Minimum 2 karakter hosszú településnév szükséges</mat-error
+          >
+          }
+        </mat-form-field>
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Ár</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="pl.: 1000000"
+                formControlName="price"
+              />
+              <mat-hint>Az ár magyar forintban megadandó</mat-hint>
+              @if (this.newListingForm.get('price')?.hasError('required')) {
+              <mat-error>Az ár megadása kötelező</mat-error>
+              } @if (this.newListingForm.get('price')?.hasError('minlength')) {
+              <mat-error>Minimum 2 számjegy hosszú ár szükséges</mat-error>
+              }
+              <p matTextSuffix>HUF</p>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Szobák száma</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="pl.: 2"
+                formControlName="roomCount"
+              />
+              @if (this.newListingForm.get('roomCount')?.hasError('required')) {
+              <mat-error>A szobaszám megadása kötelező</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Típus</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="pl.: Kertesház, Garzon, ..."
+            formControlName="type"
+          />
+          <mat-hint>Az ár magyar forintban megadandó</mat-hint>
+          @if (this.newListingForm.get('type')?.hasError('required')) {
+          <mat-error>A típus megadása kötelező</mat-error>
+          } @if (this.newListingForm.get('type')?.hasError('minlength')) {
+          <mat-error>Minimum 2 karakter hosszú típus szükséges</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-4">
+        <div class="image-upload-section">
+          <ngx-dropzone
+            class="dropzone"
+            (change)="onSelect($event)"
+            [multiple]="true"
+            [accept]="'image/*'"
+            [maxFileSize]="1000000"
+            [disableClick]="uploadedFiles.length >= 10"
+          >
+            <ngx-dropzone-label>
+              <div class="dropzone-label">
+                <mat-icon>cloud_upload</mat-icon>
+                <div>Húzd ide a képeket vagy kattints a tallózáshoz</div>
+              </div>
+            </ngx-dropzone-label>
+
+            @for (file of uploadedFiles; track file) {
+            <ngx-dropzone-preview
+              class="dropzone-preview"
+              [removable]="true"
+              (removed)="onRemove(file)"
+            >
+              <ngx-dropzone-label
+                >{{ file.name }} ({{
+                  file.size / 1000 | number : "1.0-0"
+                }}
+                kB)</ngx-dropzone-label
+              >
+            </ngx-dropzone-preview>
+            }
+          </ngx-dropzone>
+
+          <p class="hint">Minimum 3 és maximum 10 kép feltöltése</p>
+
+          @if (uploadedFiles.length < 3) {
+          <p class="error hint">Legalább 3 kép feltöltése kötelező</p>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <app-text-editor></app-text-editor>
+      </div>
+    </div>
+  </form>
+</div>

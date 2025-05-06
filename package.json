@@ -12,7 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.2.8",
-    "@angular/cdk": "^19.2.4",
+    "@angular/cdk": "^19.2.14",
     "@angular/common": "^19.2.8",
     "@angular/compiler": "^19.2.8",
     "@angular/core": "^19.2.8",
@@ -26,8 +26,10 @@
     "bootstrap-icons": "^1.11.3",
     "boxicons": "^2.1.4",
     "firebase": "^11.6.1",
+    "ngx-dropzone": "^3.1.0",
     "ngx-lightbox": "^3.0.0",
     "ngx-material-timepicker": "^13.1.1",
+    "primeng": "^19.1.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

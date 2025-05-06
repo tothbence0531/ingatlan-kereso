@@ -10,20 +10,7 @@
     <li routerLink="/"><mat-icon>home</mat-icon></li>
     <li routerLink="/properties"><mat-icon>search</mat-icon></li>
     <li routerLink="/about"><mat-icon>info</mat-icon></li>
-    <!-- <li [routerLink]="authService.isAuthenticated() ? '/profile' : '/login'">
-      <mat-icon>account_circle</mat-icon>
-    </li> -->
   </ul>
-
-  <!-- @if (authService.isAuthenticated()) {
-  <a class="menu-button" mat-raised-button (click)="logout()">
-    Kijelentkezés
-  </a>
-  } @else {
-  <a class="menu-button" mat-raised-button routerLink="/login">
-    Bejelentkezés
-  </a> 
-  }-->
 
   <button
     mat-icon-button
@@ -39,7 +26,12 @@
       <mat-icon>account_circle</mat-icon>
       <span>Profil</span>
     </button>
-    } @else {
+    @if (currentUser?.role == 'seller') {
+    <button mat-menu-item routerLink="/new">
+      <mat-icon>add_home_work</mat-icon>
+      <span>Hirdetés hozzáadása</span>
+    </button>
+    } } @else {
     <button mat-menu-item routerLink="/login">
       <mat-icon>account_circle</mat-icon>
       <span>Bejelentkezés</span>

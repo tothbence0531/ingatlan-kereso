@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './services/auth.guard';
 import { guestGuard } from './services/guest.guard';
+import { sellerGuard } from './services/seller.guard';
 
 export const routes: Routes = [
   {
@@ -48,6 +49,14 @@ export const routes: Routes = [
       import('./pages/property-details/property-details.component').then(
         (m) => m.PropertyDetailsComponent
       ),
+  },
+  {
+    path: 'new',
+    loadComponent: () =>
+      import('./pages/new-listing/new-listing.component').then(
+        (m) => m.NewListingComponent
+      ),
+    canActivate: [sellerGuard],
   },
   {
     path: '**',
