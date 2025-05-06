@@ -6,7 +6,7 @@
   <h1 class="title">Új hirdetés hozzáadása</h1>
   <form [formGroup]="newListingForm" (ngSubmit)="onSubmit()">
     <div class="row">
-      <div class="inputs-wrapper col-8">
+      <div class="inputs-wrapper col-lg-8">
         <mat-form-field appearance="outline">
           <mat-label>Cím</mat-label>
           <input
@@ -38,7 +38,7 @@
           >
           }
         </mat-form-field>
-        <div class="row">
+        <div class="input-group-row row">
           <div class="col">
             <mat-form-field class="w-100" appearance="outline">
               <mat-label>Ár</mat-label>
@@ -80,7 +80,6 @@
             placeholder="pl.: Kertesház, Garzon, ..."
             formControlName="type"
           />
-          <mat-hint>Az ár magyar forintban megadandó</mat-hint>
           @if (this.newListingForm.get('type')?.hasError('required')) {
           <mat-error>A típus megadása kötelező</mat-error>
           } @if (this.newListingForm.get('type')?.hasError('minlength')) {
@@ -88,7 +87,7 @@
           }
         </mat-form-field>
       </div>
-      <div class="col-4">
+      <div class="col-lg-4">
         <div class="image-upload-section">
           <ngx-dropzone
             class="dropzone"
@@ -130,7 +129,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col">
+      <div class="text-editor-col col">
         <app-text-editor></app-text-editor>
       </div>
     </div>

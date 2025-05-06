@@ -1,9 +1,52 @@
 @use "@angular/material" as mat;
-
+@use "../node_modules/quill/dist/quill.snow.css" as *;
 @use "./app/themes/theme.css" as *;
 
 @import url("https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+// INFO: VARIABLES
+
+$primary-color: var(--mat-sys-primary);
+$secondary-color: var(--mat-sys-secondary);
+$tertiary-color: var(--mat-sys-tertiary);
+$background-color: var(--mat-sys-background);
+$surface-color: var(--mat-sys-surface);
+$on-primary-color: var(--mat-sys-on-primary);
+$on-secondary-color: var(--mat-sys-on-secondary);
+$on-tertiary-color: var(--mat-sys-on-tertiary);
+$on-background-color: var(--mat-sys-on-background);
+$on-surface-color: var(--mat-sys-on-surface);
+$inverse-on-surface-color: var(--mat-sys-inverse-on-surface);
+$surface-container-color: var(--mat-sys-surface-container);
+$shadow-color: var(--mat-sys-shadow);
+$on-surface-variant-color: var(--mat-sys-on-surface-variant);
+$error-color: var(--mat-sys-error);
+$on-error-color: var(--mat-sys-on-error);
+$error-container-color: var(--mat-sys-error-container);
+$primary-container-color: var(--mat-sys-primary-container);
+$on-primary-container-color: var(--mat-sys-on-primary-container);
+$primary-fixed-color: var(--mat-sys-primary-fixed);
+$on-primary-fixed-color: var(--mat-sys-on-primary-fixed);
+$primary-fixed-dim-color: var(--mat-sys-primary-fixed-dim);
+$on-primary-fixed-dim-color: var(--mat-sys-on-primary-fixed-dim);
+$on-primary-fixed-variant-color: var(--mat-sys-on-primary-fixed-variant);
+$secondary-container-color: var(--mat-sys-secondary-container);
+$on-secondary-container-color: var(--mat-sys-on-secondary-container);
+$secondary-fixed-color: var(--mat-sys-secondary-fixed);
+$on-secondary-fixed-color: var(--mat-sys-on-secondary-fixed);
+$secondary-fixed-dim-color: var(--mat-sys-secondary-fixed-dim);
+$on-secondary-fixed-dim-color: var(--mat-sys-on-secondary-fixed-dim);
+$on-secondary-fixed-variant-color: var(--mat-sys-on-secondary-fixed-variant);
+$tertiary-container-color: var(--mat-sys-tertiary-container);
+$on-tertiary-container-color: var(--mat-sys-on-tertiary-container);
+$tertiary-fixed-color: var(--mat-sys-tertiary-fixed);
+$on-tertiary-fixed-color: var(--mat-sys-on-tertiary-fixed);
+$tertiary-fixed-dim-color: var(--mat-sys-tertiary-fixed-dim);
+$on-tertiary-fixed-dim-color: var(--mat-sys-on-tertiary-fixed-dim);
+$on-tertiary-fixed-variant-color: var(--mat-sys-on-tertiary-fixed-variant);
+$surface-bright-color: var(--mat-sys-surface-bright);
+$outline-color: var(--mat-sys-outline);
 
 html {
   @include mat.theme(
@@ -11,6 +54,36 @@ html {
       typography: Inter,
     )
   );
+}
+
+/* Quill editor */
+.ql-toolbar.ql-snow {
+  border: 1px solid $outline-color;
+  background-color: $surface-container-color;
+  border-radius: 4px 4px 0 0;
+}
+
+.ql-container.ql-snow {
+  border: 1px solid $outline-color;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  background-color: $surface-container-color;
+}
+
+.ql-editor {
+  min-height: 200px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: $on-surface-color;
+  * {
+    color: $on-surface-color !important;
+  }
+}
+
+.ql-editor.ql-blank::before {
+  color: $on-surface-color;
+  font-style: normal;
 }
 
 .spinner mat-spinner {
@@ -96,45 +169,3 @@ html[data-theme="dark"] {
 /* * {
   outline: 1px solid red;
 }*/
-
-// INFO: VARIABLES
-
-$primary-color: var(--mat-sys-primary);
-$secondary-color: var(--mat-sys-secondary);
-$tertiary-color: var(--mat-sys-tertiary);
-$background-color: var(--mat-sys-background);
-$surface-color: var(--mat-sys-surface);
-$on-primary-color: var(--mat-sys-on-primary);
-$on-secondary-color: var(--mat-sys-on-secondary);
-$on-tertiary-color: var(--mat-sys-on-tertiary);
-$on-background-color: var(--mat-sys-on-background);
-$on-surface-color: var(--mat-sys-on-surface);
-$inverse-on-surface-color: var(--mat-sys-inverse-on-surface);
-$surface-container-color: var(--mat-sys-surface-container);
-$shadow-color: var(--mat-sys-shadow);
-$on-surface-variant-color: var(--mat-sys-on-surface-variant);
-$error-color: var(--mat-sys-error);
-$on-error-color: var(--mat-sys-on-error);
-$error-container-color: var(--mat-sys-error-container);
-$primary-container-color: var(--mat-sys-primary-container);
-$on-primary-container-color: var(--mat-sys-on-primary-container);
-$primary-fixed-color: var(--mat-sys-primary-fixed);
-$on-primary-fixed-color: var(--mat-sys-on-primary-fixed);
-$primary-fixed-dim-color: var(--mat-sys-primary-fixed-dim);
-$on-primary-fixed-dim-color: var(--mat-sys-on-primary-fixed-dim);
-$on-primary-fixed-variant-color: var(--mat-sys-on-primary-fixed-variant);
-$secondary-container-color: var(--mat-sys-secondary-container);
-$on-secondary-container-color: var(--mat-sys-on-secondary-container);
-$secondary-fixed-color: var(--mat-sys-secondary-fixed);
-$on-secondary-fixed-color: var(--mat-sys-on-secondary-fixed);
-$secondary-fixed-dim-color: var(--mat-sys-secondary-fixed-dim);
-$on-secondary-fixed-dim-color: var(--mat-sys-on-secondary-fixed-dim);
-$on-secondary-fixed-variant-color: var(--mat-sys-on-secondary-fixed-variant);
-$tertiary-container-color: var(--mat-sys-tertiary-container);
-$on-tertiary-container-color: var(--mat-sys-on-tertiary-container);
-$tertiary-fixed-color: var(--mat-sys-tertiary-fixed);
-$on-tertiary-fixed-color: var(--mat-sys-on-tertiary-fixed);
-$tertiary-fixed-dim-color: var(--mat-sys-tertiary-fixed-dim);
-$on-tertiary-fixed-dim-color: var(--mat-sys-on-tertiary-fixed-dim);
-$on-tertiary-fixed-variant-color: var(--mat-sys-on-tertiary-fixed-variant);
-$surface-bright-color: var(--mat-sys-surface-bright);

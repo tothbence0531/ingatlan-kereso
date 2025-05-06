@@ -1,19 +1,47 @@
 import { Component } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { MaterialModule } from '../../modules/material.module';
-import { NgIf } from '@angular/common';
-import { EditorModule } from 'primeng/editor';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-text-editor',
   templateUrl: './texteditor.component.html',
   styleUrls: ['./texteditor.component.scss'],
-  imports: [MaterialModule, EditorModule],
+  imports: [MaterialModule, QuillModule],
 })
-export class TexteditorComponent {}
+export class TexteditorComponent {
+  text?: string;
+
+  editorModules = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [
+        {
+          color: [
+            '#000000',
+            '#e60000',
+            '#ff9900',
+            '#ffff00',
+            '#008a00',
+            '#0066cc',
+            '#9933ff',
+            '#ffffff',
+          ],
+        },
+      ],
+      [
+        {
+          background: [
+            '#000000',
+            '#e60000',
+            '#ff9900',
+            '#ffff00',
+            '#008a00',
+            '#0066cc',
+            '#9933ff',
+            '#ffffff',
+          ],
+        },
+      ],
+    ],
+  };
+}

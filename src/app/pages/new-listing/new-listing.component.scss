@@ -5,7 +5,6 @@
 }
 
 .title {
-  margin-top: 2rem;
   margin-bottom: 2rem;
 }
 
@@ -24,7 +23,7 @@
 
 .dropzone {
   background-color: $surface-container-color;
-  border-color: $on-surface-color;
+  border-color: $outline-color;
   height: 92%;
   * {
     color: $on-surface-color;
@@ -44,18 +43,36 @@
   }
 
   .dropzone-preview {
+    background: $background-color;
     * {
-      color: $background-color;
+      color: $on-surface-color;
     }
   }
 }
 
 .image-upload-section {
   height: 100%;
+  padding: 1rem;
   .hint {
     font-size: 0.8rem !important;
   }
   .error {
     color: $error-color;
   }
+}
+
+.input-group-row {
+  gap: 1rem;
+}
+
+.container {
+  background-color: $surface-container-color;
+  padding: 1rem;
+  margin-top: 2rem;
+  border-radius: 1rem;
+}
+
+.text-editor-col {
+  background-color: $surface-container-color;
+  padding: 1rem;
 }

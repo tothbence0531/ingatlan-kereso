@@ -18,6 +18,18 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     importProvidersFrom(HttpClientModule),
     provideRouter(routes),
-    { provide: LOCALE_ID, useValue: 'hu' }, provideFirebaseApp(() => initializeApp({ projectId: "keyfinder-dd44c", appId: "1:330981805429:web:89f9f4821f56d75364973c", storageBucket: "keyfinder-dd44c.firebasestorage.app", apiKey: "AIzaSyA8avxs_ZzoIAY_Cz83fkur3IAp2nzmPhU", authDomain: "keyfinder-dd44c.firebaseapp.com", messagingSenderId: "330981805429" })), provideAuth(() => getAuth()), provideFirestore(() => getFirestore()),
+    { provide: LOCALE_ID, useValue: 'hu' },
+    provideFirebaseApp(() =>
+      initializeApp({
+        projectId: 'keyfinder-dd44c',
+        appId: '1:330981805429:web:89f9f4821f56d75364973c',
+        storageBucket: 'keyfinder-dd44c.firebasestorage.app',
+        apiKey: 'AIzaSyA8avxs_ZzoIAY_Cz83fkur3IAp2nzmPhU',
+        authDomain: 'keyfinder-dd44c.firebaseapp.com',
+        messagingSenderId: '330981805429',
+      })
+    ),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
   ],
 };
