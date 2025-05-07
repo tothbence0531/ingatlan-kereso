@@ -85,10 +85,16 @@
 </div>
 
 <div class="container">
+  @switch(loadingState) { @case ('loading') {
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Ingatlan adatok betöltése...</p>
+  </div>
+  } @case ('loaded') {
   <div class="card row">
-    <h1>{{ property.title }}</h1>
+    <h1>{{ property?.title }}</h1>
     <p class="created-at">
-      Közzétéve: {{ property.created_at | date : "yyyy.MM.dd HH:mm" }}
+      Közzétéve: {{ property?.created_at | date : "yyyy.MM.dd HH:mm" }}
     </p>
     <div class="col-lg-8 col-12 img-container">
       <div class="image-actions">
@@ -100,40 +106,47 @@
           >favorite</mat-icon
         >
       </div>
-
+      @if ( property?.images?.[0] != null){
       <img
-        src="/assets/property-images/{{ property.images[0] }}"
-        alt="property-image:{{ property.id }}"
+        src="/assets/property-images/{{ property?.images?.[0] }}"
+        alt="property-image:{{ property?.id }}"
         (click)="openLightbox(0)"
       />
+      } @else {
+      <img
+        class=""
+        src="/assets/missing-image.jpg"
+        alt="property-image:{{ property?.id }}0"
+      />
+      }
     </div>
 
     <div class="col-lg-4 col-12 more-images-container">
-      @if (property.images[1] != null) {
+      @if ( property?.images?.[1] != null) {
       <img
         class=""
-        src="/assets/property-images/{{ property.images[1] }}"
-        alt="property-image:{{ property.id }}1"
+        src="/assets/property-images/{{ property?.images?.[1] }}"
+        alt="property-image:{{ property?.id }}1"
         (click)="openLightbox(1)"
       />
       } @else {
       <img
         class=""
         src="/assets/missing-image.jpg"
-        alt="property-image:{{ property.id }}2"
+        alt="property-image:{{ property?.id }}2"
       />
-      } @if (property.images[2] != null) {
+      } @if (property?.images?.[2] != null) {
       <img
         class=""
-        src="/assets/property-images/{{ property.images[2] }}"
+        src="/assets/property-images/{{ property?.images?.[2] }}"
         (click)="openLightbox(2)"
-        alt="property-image:{{ property.id }}3"
+        alt="property-image:{{ property?.id }}3"
       />
       } @else {
       <img
         class=""
         src="/assets/missing-image.jpg"
-        alt="property-image:{{ property.id }}2"
+        alt="property-image:{{ property?.id }}2"
       />
       }
     </div>
@@ -142,28 +155,47 @@
       <h2 class="location">
         <mat-icon>location_on</mat-icon>
 
-        {{ property.location }}
+        {{ property?.location }}
       </h2>
       <p class="type">
         <mat-icon>apartment</mat-icon>
-        {{ property.type }}
+        {{ property?.type }}
       </p>
       <p class="room-count">
         <mat-icon>bed</mat-icon>
-        {{ property.roomCount }} szoba
+        {{ property?.roomCount }} szoba
       </p>
     </div>
 
     <div class="col-md-6 col-12 price">
-      <p>{{ property.price | currency : "HUF" : "symbol-narrow" : "1.0-0" }}</p>
+      <p>
+        {{ property?.price | currency : "HUF" : "symbol-narrow" : "1.0-0" }}
+      </p>
     </div>
 
     <p class="long-description">Hosszú leírás:</p>
     <app-truncated-text
-      [text]="property.description"
+      [text]="property?.description || ''"
       [maxLength]="800"
     ></app-truncated-text>
   </div>
+  } @case ('error') {
+  <div class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <p>Hiba történt az adatok betöltése közben</p>
+    <button mat-raised-button color="primary" (click)="reloadPage()">
+      Újrapróbálkozás
+    </button>
+  </div>
+  } @default {
+  <div class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <p>Hiba történt az adatok betöltése közben</p>
+    <button mat-raised-button color="primary" (click)="reloadPage()">
+      Újrapróbálkozás
+    </button>
+  </div>
+  } }
 </div>
 
 <div class="footer-wrapper">

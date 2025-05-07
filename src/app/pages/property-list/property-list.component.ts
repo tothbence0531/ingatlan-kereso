@@ -4,11 +4,12 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { MaterialModule } from '../../modules/material.module';
 import { Property } from '../../models/property.model';
 import { PropertyService } from '../../services/property.service';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { DetailedSearchbarComponent } from '../../components/detailed-searchbar/detailed-searchbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { SearchCriteria } from '../../models/search.model';
 import { PageEvent } from '@angular/material/paginator';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-property-list',
@@ -18,14 +19,15 @@ import { PageEvent } from '@angular/material/paginator';
     NavbarComponent,
     DetailedSearchbarComponent,
     FooterComponent,
+    AsyncPipe,
   ],
   templateUrl: './property-list.component.html',
   styleUrl: './property-list.component.scss',
 })
 export class PropertyListComponent implements OnInit {
   properties$: Observable<Property[]>;
-  filteredProperties!: Property[];
-  paginatedProperties!: Property[];
+  filteredProperties!: Observable<Property[]>;
+  paginatedProperties!: Observable<Property[]>;
   pageSize = 8;
   pageIndex = 0;
 
@@ -49,7 +51,9 @@ export class PropertyListComponent implements OnInit {
   updatePaginatedProperties() {
     const start = this.pageIndex * this.pageSize;
     const end = start + this.pageSize;
-    this.paginatedProperties = this.filteredProperties.slice(start, end);
+    this.paginatedProperties = this.filteredProperties.pipe(
+      map((properties) => properties.slice(start, end))
+    );
   }
 
   ngOnInit() {

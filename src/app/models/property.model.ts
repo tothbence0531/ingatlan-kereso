@@ -1,5 +1,5 @@
 export interface Property {
-  id: number;
+  id: string;
   title: string;
   type: string;
   price: number;
@@ -7,5 +7,5 @@ export interface Property {
   description: string;
   roomCount: number;
   images: string[];
-  created_at: string; // TODO: implement created_at
+  created_at: string;
 }

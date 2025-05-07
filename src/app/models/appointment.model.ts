@@ -1,5 +1,5 @@
 export interface Appointment {
   userId: string;
-  propertyId: number;
+  propertyId: string;
   date: Date;
 }

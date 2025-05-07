@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { MaterialModule } from '../../modules/material.module';
 import { QuillModule } from 'ngx-quill';
 
@@ -10,6 +10,7 @@ import { QuillModule } from 'ngx-quill';
 })
 export class TexteditorComponent {
   text?: string;
+  quillEditor: any;
 
   editorModules = {
     toolbar: [
@@ -43,5 +44,27 @@ export class TexteditorComponent {
         },
       ],
     ],
+    clipboard: {
+      matchVisual: false,
+    },
   };
+
+  @Output() contentChanged = new EventEmitter<string>();
+
+  onEditorCreated(editor: any) {
+    this.quillEditor = editor;
+    this.setupPlainTextPaste(editor);
+  }
+
+  onEditorChanged(event: string) {
+    //console.log(event);
+    this.contentChanged.emit(event);
+  }
+
+  private setupPlainTextPaste(editor: any) {
+    editor.clipboard.addMatcher(Node.ELEMENT_NODE, (node: any, delta: any) => {
+      const plainText = node.innerText || node.textContent;
+      return new editor.constructor.imports.delta().insert(plainText);
+    });
+  }
 }

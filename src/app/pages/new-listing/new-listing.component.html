@@ -122,15 +122,58 @@
 
           <p class="hint">Minimum 3 és maximum 10 kép feltöltése</p>
 
-          @if (uploadedFiles.length < 3) {
-          <p class="error hint">Legalább 3 kép feltöltése kötelező</p>
-          }
+          @if (newListingForm.get('images')?.errors) { @if
+          (newListingForm.get('images')?.errors?.['minLength']) {
+          <mat-error class="error hint">
+            Legalább
+            {{ newListingForm.get('images')?.errors?.['minLength'].requiredLength }}
+            kép szükséges (jelenleg:
+            {{ newListingForm.get('images')?.errors?.['minLength'].actualLength
+
+
+            }})
+          </mat-error>
+
+          } @if (newListingForm.get('images')?.errors?.['maxLength']) {
+          <mat-error class="error hint">
+            Legfeljebb
+            {{ newListingForm.get('images')?.errors?.['maxLength'].requiredLength }}
+            kép feltöltése megengedett (jelenleg:
+            {{ newListingForm.get('images')?.errors?.['maxLength'].actualLength
+
+
+            }})
+          </mat-error>
+          } }
         </div>
       </div>
     </div>
     <div class="row">
       <div class="text-editor-col col">
-        <app-text-editor></app-text-editor>
+        <app-text-editor
+          (contentChanged)="onContentChanged($event)"
+        ></app-text-editor>
+        @if (newListingForm.get('description')?.errors){ @if
+        (newListingForm.get('description')?.errors?.['required']) {
+        <mat-error class="error hint">Szöveg megadása kötelező</mat-error>
+        } @if (newListingForm.get('description')?.errors?.['minlength']) {
+        <mat-error class="error hint">
+          Legalább
+          {{ newListingForm.get('description')?.errors?.['minlength'].requiredLength -7
+          }}
+          karakter hosszú szöveg szükséges </mat-error
+        >} @if (newListingForm.get('description')?.errors?.['maxlength']) {
+        <mat-error class="error hint">
+          Legfeljebb
+          {{ newListingForm.get('description')?.errors?.['maxlength'].requiredLength
+          }}
+          karakter hosszú szöveg szükséges </mat-error
+        >} }
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button mat-flat-button type="submit">Hozzáadás</button>
       </div>
     </div>
   </form>

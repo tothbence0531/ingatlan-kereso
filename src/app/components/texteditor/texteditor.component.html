@@ -3,4 +3,6 @@
   [modules]="editorModules"
   [(ngModel)]="text"
   placeholder="Írj be a hírdetés szövegét"
+  (onEditorCreated)="onEditorCreated($event)"
+  (ngModelChange)="onEditorChanged($event)"
 ></quill-editor>

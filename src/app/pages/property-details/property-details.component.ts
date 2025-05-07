@@ -46,7 +46,7 @@ import { HostListener } from '@angular/core';
   styleUrl: './property-details.component.scss',
 })
 export class PropertyDetailsComponent implements OnInit {
-  property!: Property;
+  property: Property | null = null;
   dateFormGroup: FormGroup;
   timeFormGroup: FormGroup;
   currentUser: Observable<User | null>;
@@ -56,6 +56,7 @@ export class PropertyDetailsComponent implements OnInit {
   resizeTimeout: any;
   private lightboxSubscription?: Subscription;
   currentLightboxImageIndex = 0;
+  loadingState: 'loading' | 'loaded' | 'error' = 'loading';
 
   constructor(
     private authService: AuthService,
@@ -90,16 +91,25 @@ export class PropertyDetailsComponent implements OnInit {
       this.router.navigate(['/not-found']);
       return;
     }
-    this.propertyService
-      .getPropertyById(parseInt(propertyId))
-      .subscribe((property) => {
+
+    this.loadingState = 'loading';
+
+    this.propertyService.getPropertyById(propertyId).subscribe({
+      next: (property) => {
         if (property) {
           this.property = property;
           this.initAlbum();
+          this.loadingState = 'loaded';
         } else {
+          this.loadingState = 'error';
           this.router.navigate(['/not-found']);
         }
-      });
+      },
+      error: () => {
+        this.loadingState = 'error';
+        this.router.navigate(['/error']);
+      },
+    });
   }
 
   closeModal(): void {
@@ -130,11 +140,16 @@ export class PropertyDetailsComponent implements OnInit {
   }
 
   submitAppointment() {
+    if (!this.property?.id) {
+      console.error('Property not loaded yet');
+      return;
+    }
     if (
       this.dateFormGroup.valid &&
       this.timeFormGroup.valid &&
       this.authService.isAuthenticated() &&
-      this.currentUser
+      this.currentUser &&
+      this.property
     ) {
       const dateValue = this.dateFormGroup.get('date')?.value;
       const timeValue = this.timeFormGroup.get('time')?.value;
@@ -177,16 +192,16 @@ export class PropertyDetailsComponent implements OnInit {
   }
 
   initAlbum() {
-    this._album = [];
-    for (let i = 0; i < this.property.images.length; i++) {
-      this._album.push({
-        src: `/assets/property-images/${this.property.images[i]}`,
-        thumb: `/assets/property-images/${this.property.images[i]}`,
-      });
-    }
+    if (!this.property?.images) return;
+
+    this._album = this.property.images.map((image) => ({
+      src: `/assets/property-images/${image}`,
+      thumb: `/assets/property-images/${image}`,
+    }));
   }
 
   openLightbox(index: number) {
+    if (!this.property?.images?.length) return;
     this.currentLightboxImageIndex = index;
     this.lightboxSubscription = this.lightboxEvent.lightboxEvent$.subscribe(
       (event: any) => {
@@ -234,5 +249,9 @@ export class PropertyDetailsComponent implements OnInit {
     this.lightbox.close();
     this.openLightbox(this.currentLightboxImageIndex);
     //console.log('after: ', this.lightboxOpened);
+  }
+
+  reloadPage() {
+    this.router.navigate(['/property-list']);
   }
 }
