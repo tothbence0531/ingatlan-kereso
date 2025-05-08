@@ -1,5 +1,6 @@
 export interface Appointment {
-  userId: string;
+  id: string;
+  owner: string;
   propertyId: string;
-  date: Date;
+  date: string;
 }

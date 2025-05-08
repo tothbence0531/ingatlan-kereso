@@ -25,6 +25,7 @@ import { AppointmentService } from '../../services/appointment.service';
 import { Lightbox, IAlbum, LightboxEvent, LIGHTBOX_EVENT } from 'ngx-lightbox';
 import { LightboxModule } from 'ngx-lightbox';
 import { HostListener } from '@angular/core';
+import { Appointment } from '../../models/appointment.model';
 
 @Component({
   selector: 'app-property-details',
@@ -178,14 +179,21 @@ export class PropertyDetailsComponent implements OnInit {
       date.setHours(hours);
       date.setMinutes(minutes);
 
-      this.appointmentService.addAppointment({
-        userId: 'placeholder', // TODO: fix this
-        propertyId: this.property.id,
-        date: date,
-      });
-
-      const modal = document.querySelector('.modal');
-      modal?.classList.add('hidden');
+      this.appointmentService
+        .addAppointment({
+          id: this.property.id,
+          date: date.toISOString(),
+        } as Appointment)
+        .then(() => {
+          console.log('Appointment added successfully');
+        })
+        .catch((err) => {
+          console.error('Failed to add appointment:', err);
+        })
+        .finally(() => {
+          const modal = document.querySelector('.modal');
+          modal?.classList.add('hidden');
+        });
     } else {
       console.log('A érvénytelen időpontfoglalás');
     }

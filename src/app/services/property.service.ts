@@ -1,36 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { Property } from '../models/property.model';
-import {
-  BehaviorSubject,
-  catchError,
-  firstValueFrom,
-  from,
-  map,
-  Observable,
-  of,
-  switchMap,
-  take,
-  throwError,
-} from 'rxjs';
-import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { firstValueFrom, map, Observable, take } from 'rxjs';
+
 import { SearchCriteria } from '../models/search.model';
-import propertiesData from '../../../public/assets/data/properties.json';
 import { AuthService } from './auth.service';
-import {
-  collection,
-  collectionData,
-  docData,
-  Firestore,
-  Timestamp,
-} from '@angular/fire/firestore';
-import {
-  addDoc,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
+import { collection, collectionData, Firestore } from '@angular/fire/firestore';
+import { addDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { AppUser } from '../models/user.model';
 
 @Injectable({
