@@ -16,6 +16,8 @@ import { TexteditorComponent } from '../../components/texteditor/texteditor.comp
 import { LengthError, ValidationErrors } from '../../models/errors.model';
 import { Timestamp } from '@angular/fire/firestore';
 import { AuthService } from '../../services/auth.service';
+import { PropertyService } from '../../services/property.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-listing',
@@ -34,7 +36,12 @@ export class NewListingComponent {
   newListingForm: FormGroup;
   uploadedFiles: File[] = [];
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private propertyService: PropertyService,
+    private router: Router
+  ) {
     this.newListingForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       description: [
@@ -98,5 +105,31 @@ export class NewListingComponent {
     };
   }
 
-  async onSubmit() {}
+  onSubmit() {
+    if (!this.newListingForm.valid) {
+      console.log('Form is invalid');
+      return;
+    }
+
+    const newProperty = {
+      title: this.newListingForm.value.title,
+      type: this.newListingForm.value.type,
+      price: Number(this.newListingForm.value.price),
+      location: this.newListingForm.value.location,
+      description: this.newListingForm.value.description,
+      roomCount: Number(this.newListingForm.value.roomCount),
+      images: this.uploadedFiles.map((f) => f.name),
+    };
+
+    this.propertyService
+      .addProperty(newProperty)
+      .then((property) => {
+        console.log('Property added successfully with ID:', property.id);
+        this.router.navigate(['/profile']);
+      })
+      .catch((err) => {
+        console.error('Failed to add property:', err);
+        // Show error message to user
+      });
+  }
 }
