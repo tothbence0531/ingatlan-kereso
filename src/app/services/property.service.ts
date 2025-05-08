@@ -141,7 +141,7 @@ export class PropertyService {
    * created_at is set to the current date
    * owner is set to the user's uid
    * @param propertyData property data to add without id, created_at and owner
-   * @returns  observable that emits the id of the added property
+   * @returns  promise that resolves to the added property
    */
   async addProperty(
     propertyData: Omit<Property, 'id' | 'created_at' | 'owner'>
