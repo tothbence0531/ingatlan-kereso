@@ -1,10 +1,11 @@
 import { inject, Injectable, Injector } from '@angular/core';
-import { firstValueFrom, take } from 'rxjs';
+import { firstValueFrom, map, Observable, of, take } from 'rxjs';
 import { Appointment } from '../models/appointment.model';
 import { AuthService } from './auth.service';
 import { addDoc, Firestore } from '@angular/fire/firestore';
 import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { AppUser } from '../models/user.model';
+import { User } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +13,13 @@ import { AppUser } from '../models/user.model';
 export class AppointmentService {
   private readonly appointmentCollection;
   private readonly userCollection;
+  private currentUser$: Observable<User | null> = of(null);
 
   constructor(private authservice: AuthService, private firestore: Firestore) {
     this.firestore = inject(Firestore);
     this.appointmentCollection = collection(this.firestore, 'Appointments');
     this.userCollection = collection(this.firestore, 'Users');
+    this.currentUser$ = this.authservice.getCurrentUser();
   }
 
   /**

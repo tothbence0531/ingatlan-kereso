@@ -1,0 +1,157 @@
+@use "../../../styles.scss" as *;
+
+$profpicSize: 5rem;
+
+.nav-wrapper {
+  background-color: $primary-color;
+}
+
+.user-header {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    .prof-pic {
+      width: $profpicSize;
+      height: $profpicSize;
+      border-radius: 50%;
+    }
+    .__info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+
+      .user-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .user-email {
+        font-size: 1rem;
+        color: $secondary-color;
+      }
+    }
+  }
+  .user-role {
+    background-color: $secondary-color;
+    color: $on-secondary-color;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+  }
+}
+
+hr {
+  margin-top: 2rem;
+  border: none;
+  border-top: 3px solid $surface-container-color;
+}
+
+.listings-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+
+  .__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $surface-container-color;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  }
+
+  .__listings {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    border: 5px solid $surface-container-color;
+    border-top: none;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+}
+
+.appointments-container {
+  margin-top: 2rem;
+
+  .__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $surface-container-color;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  }
+
+  .__content {
+    border: 5px solid $surface-container-color;
+    border-top: none;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    max-height: 40rem;
+    overflow-y: auto;
+  }
+}
+
+.footer-wrapper {
+  background-color: black;
+  margin-top: 2rem;
+}
+
+.update-profile-form {
+  background-color: $surface-container-color;
+  padding: 1rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .role-radio-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .form-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+}
+
+.favourites {
+  .__header {
+    justify-content: flex-start;
+    gap: 0.5rem;
+    mat-icon {
+      color: $primary-color;
+    }
+  }
+}

@@ -1,1 +1,87 @@
-<p>user-profile works!</p>
+<div class="nav-wrapper">
+  <app-navbar></app-navbar>
+</div>
+
+<div class="container">
+  <div class="user-header">
+    <div class="left">
+      <img class="prof-pic" src="/assets/default.jpg" alt="user-image" />
+      <div class="__info">
+        <h1 class="user-name">
+          {{ (this.currentUserData$ | async)?.name?.first }}
+          {{ (this.currentUserData$ | async)?.name?.last }}
+        </h1>
+        <p class="user-email">{{ (this.currentUserData$ | async)?.email }}</p>
+      </div>
+    </div>
+    <p class="user-role">
+      {{
+        (this.currentUserData$ | async)?.role === "buyer" ? "Vásárló" : "Eladó"
+      }}
+    </p>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <div class="col-md-6 col-12">
+      <div class="favourites listings-container">
+        <div class="__header">
+          <mat-icon>favorite</mat-icon>
+          <h2>Kedvenc ingatlanok</h2>
+        </div>
+        <div class="__listings"></div>
+      </div>
+
+      <div class="appointments-container">
+        <div class="__header">
+          <h2>Időpontok</h2>
+        </div>
+        <div class="__content"></div>
+      </div>
+    </div>
+    <div class="col-md-6 col-12">
+      <form [formGroup]="updateProfileForm" class="update-profile-form">
+        <h1>Adatok kezelése</h1>
+        <mat-form-field appearance="outline">
+          <mat-label>Vezetéknév</mat-label>
+          <input matInput formControlName="firstName" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Keresztnév</mat-label>
+          <input matInput formControlName="lastName" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input [disabled]="true" matInput formControlName="email" />
+        </mat-form-field>
+        <mat-radio-group formControlName="role" class="role-radio-group">
+          <mat-radio-button value="buyer" class="radio"
+            >Vásárló</mat-radio-button
+          >
+          <mat-radio-button value="seller" class="radio"
+            >Eladó</mat-radio-button
+          >
+        </mat-radio-group>
+        <div class="form-actions">
+          <button class="button-warning" mat-ripple>Fiók törlése</button>
+          <button mat-flat-button color="primary">Frissítés</button>
+        </div>
+      </form>
+
+      <div class="listings-container">
+        <div class="__header">
+          <h2>Hirdetéseim</h2>
+          <button mat-mini-fab routerLink="/new">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <div class="__listings"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-wrapper">
+  <app-footer></app-footer>
+</div>

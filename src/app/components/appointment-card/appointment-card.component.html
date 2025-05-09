@@ -1,0 +1,52 @@
+<main [ngClass]="type">
+  <div class="header">
+    @if (type === 'to-attend') {
+    <p>Általad foglalt időpont</p>
+    } @if (type === 'owned') {
+    <p>Látogatófogadás</p>
+    }
+    <button
+      mat-ripple
+      [matRippleRadius]="100"
+      class="delete-button"
+      (click)="deleteAppointment()"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+  <div class="content">
+    <div class="appointment-id-container">
+      <p class="div-header">Látogatási azonosító</p>
+      <p class="div-data appointment-id">
+        {{ appointment.id }}
+      </p>
+    </div>
+
+    <div class="date-container">
+      <div class="date">
+        <p class="div-header">Dátum</p>
+        <p class="div-data date-value">
+          {{ appointment.date | date : "yy/MM/dd" }}
+        </p>
+      </div>
+
+      <div class="time">
+        <p class="div-header">Időpont</p>
+        <p class="div-data time-value">
+          {{ appointment.date | date : "HH:mm" }}
+        </p>
+      </div>
+    </div>
+
+    <div class="property-container">
+      <p class="div-header">Ingatlan azonosító</p>
+      <a
+        [routerLink]="'/property/' + appointment.propertyId"
+        class="div-data property-id"
+        appOpacityOnHover
+      >
+        {{ appointment.propertyId }}
+      </a>
+    </div>
+  </div>
+</main>

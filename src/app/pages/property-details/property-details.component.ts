@@ -183,6 +183,7 @@ export class PropertyDetailsComponent implements OnInit {
         .addAppointment({
           id: this.property.id,
           date: date.toISOString(),
+          propertyId: this.property.id,
         } as Appointment)
         .then(() => {
           console.log('Appointment added successfully');

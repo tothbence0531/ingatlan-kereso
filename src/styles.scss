@@ -165,6 +165,20 @@ html[data-theme="dark"] {
   font-weight: bold;
 }
 
+.button-warning {
+  background-color: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: 3rem;
+  font-weight: bold;
+
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+}
+
 // INFO: debug
 /* * {
   outline: 1px solid red;
