@@ -15,9 +15,7 @@
       </div>
     </div>
     <p class="user-role">
-      {{
-        (this.currentUserData$ | async)?.role === "buyer" ? "Vásárló" : "Eladó"
-      }}
+      {{ (this.currentUserData$ | async)?.role | roleTranslate }}
     </p>
   </div>
 
@@ -37,7 +35,13 @@
         <div class="__header">
           <h2>Időpontok</h2>
         </div>
-        <div class="__content"></div>
+        <div class="__content">
+          @for (appointment of this.appointments | async; track $index) {
+          <app-appointment-card
+            [appointment]="appointment"
+          ></app-appointment-card>
+          }
+        </div>
       </div>
     </div>
     <div class="col-md-6 col-12">
@@ -53,7 +57,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input [disabled]="true" matInput formControlName="email" />
+          <input matInput formControlName="email" />
         </mat-form-field>
         <mat-radio-group formControlName="role" class="role-radio-group">
           <mat-radio-button value="buyer" class="radio"
@@ -64,8 +68,12 @@
           >
         </mat-radio-group>
         <div class="form-actions">
-          <button class="button-warning" mat-ripple>Fiók törlése</button>
-          <button mat-flat-button color="primary">Frissítés</button>
+          <button class="button-warning" mat-ripple (click)="deleteUser()">
+            Fiók törlése
+          </button>
+          <button mat-flat-button color="primary" (click)="updateProfile()">
+            Frissítés
+          </button>
         </div>
       </form>
 

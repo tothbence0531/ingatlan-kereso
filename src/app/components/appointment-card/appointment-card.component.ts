@@ -4,6 +4,8 @@ import { DatePipe, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OpacityOnHoverDirective } from '../../directives/opacity-on-hover.directive';
 import { MaterialModule } from '../../modules/material.module';
+import { AuthService } from '../../services/auth.service';
+import { first, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-card',
@@ -20,10 +22,18 @@ import { MaterialModule } from '../../modules/material.module';
 export class AppointmentCardComponent {
   @Input() appointment!: Appointment;
   @Output() onAppointmentDeleted = new EventEmitter<Appointment>();
-  type: 'to-attend' | 'owned';
+  type: 'to-attend' | 'owned' = 'to-attend';
 
-  constructor() {
-    this.type = Math.random() > 0.5 ? 'to-attend' : 'owned';
+  constructor(private authService: AuthService) {
+    this.authService.getCurrentUserData$().subscribe((user) => {
+      if (user && user.listings) {
+        this.type = user.listings.includes(this.appointment.propertyId)
+          ? 'owned'
+          : 'to-attend';
+      } else {
+        this.type = 'to-attend';
+      }
+    });
   }
 
   deleteAppointment() {

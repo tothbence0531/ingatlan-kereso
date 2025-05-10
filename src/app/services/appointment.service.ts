@@ -1,8 +1,14 @@
 import { inject, Injectable, Injector } from '@angular/core';
-import { firstValueFrom, map, Observable, of, take } from 'rxjs';
+import { firstValueFrom, map, Observable, of, switchMap, take } from 'rxjs';
 import { Appointment } from '../models/appointment.model';
 import { AuthService } from './auth.service';
-import { addDoc, Firestore } from '@angular/fire/firestore';
+import {
+  addDoc,
+  Firestore,
+  where,
+  query,
+  getDocs,
+} from '@angular/fire/firestore';
 import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { AppUser } from '../models/user.model';
 import { User } from '@angular/fire/auth';
@@ -74,5 +80,69 @@ export class AppointmentService {
       console.error('Error in appointment addition process:', error);
       throw error;
     }
+  }
+
+  getAppointmentsFromCurrentUser(): Observable<Appointment[]> {
+    return this.authservice.getCurrentUser().pipe(
+      switchMap(async (user) => {
+        if (!user) return of([]);
+
+        try {
+          const userDocRef = doc(this.userCollection, user.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (!userDoc.exists()) return of([]);
+          const userData = userDoc.data() as AppUser;
+
+          const appointments: Appointment[] = [];
+          const q = query(
+            this.appointmentCollection,
+            where('owner', '==', user.uid)
+          );
+          const querySnapshot = await getDocs(q);
+
+          querySnapshot.forEach((doc) => {
+            const appointment = doc.data() as Appointment;
+            appointments.push(appointment);
+          });
+
+          if (userData.role === 'seller' && userData.listings?.length) {
+            const batchSize = 10;
+            const batches = [];
+
+            for (let i = 0; i < userData.listings.length; i += batchSize) {
+              const batch = userData.listings.slice(i, i + batchSize);
+              const q = query(
+                this.appointmentCollection,
+                where('propertyId', 'in', batch)
+              );
+              batches.push(getDocs(q));
+            }
+
+            const batchSnapshots = await Promise.all(batches);
+
+            for (const snapshot of batchSnapshots) {
+              snapshot.forEach((doc) => {
+                const appointment = doc.data() as Appointment;
+                if (!appointments.some((a) => a.id === appointment.id)) {
+                  appointments.push(appointment);
+                }
+              });
+            }
+          }
+
+          return of(
+            appointments.sort((a, b) => {
+              const aDate = new Date(a.date);
+              const bDate = new Date(b.date);
+              return aDate.getTime() - bDate.getTime();
+            })
+          );
+        } catch (error) {
+          console.error('Error in getAppointmentsFromCurrentUser:', error);
+          return of([]);
+        }
+      }),
+      switchMap((appointments) => appointments)
+    );
   }
 }

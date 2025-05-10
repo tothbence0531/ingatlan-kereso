@@ -1,30 +1,37 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { User } from '@angular/fire/auth';
-import { catchError, from, map, Observable, of, switchMap } from 'rxjs';
+import {
+  catchError,
+  first,
+  firstValueFrom,
+  from,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   UserCredential,
 } from 'firebase/auth';
-import { Auth, authState } from '@angular/fire/auth';
+import { Auth, authState, deleteUser } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AppUser } from '../models/user.model';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { collection } from 'firebase/firestore';
-import { Firestore } from '@angular/fire/firestore';
+import { deleteDoc, Firestore, updateDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private currentUser$: Observable<User | null>;
+  private firestore = inject(Firestore);
+  private usersCollection = collection(this.firestore, 'Users');
 
-  constructor(
-    private auth: Auth,
-    private router: Router,
-    private firestore: Firestore
-  ) {
+  constructor(private auth: Auth, private router: Router) {
     this.currentUser$ = authState(this.auth);
   }
 
@@ -146,5 +153,45 @@ export class AuthService {
   ): Promise<void> {
     const userRef = doc(collection(this.firestore, 'Users'), uid);
     return await setDoc(userRef, user);
+  }
+
+  async updateUser(userData: Partial<AppUser>): Promise<void> {
+    try {
+      const user = await firstValueFrom(this.getCurrentUser().pipe(first()));
+      if (!user) throw new Error('Felhasználó nincs bejelentkezve');
+      const userDocRef = doc(this.usersCollection, user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) throw new Error('Felhasználó nincs bejelentkezve');
+      const userDataToUpdate = {
+        ...userDoc.data(),
+      } as AppUser;
+
+      const updatedUserData = {
+        ...userDataToUpdate,
+        ...userData,
+      };
+
+      return await updateDoc(userDocRef, updatedUserData);
+    } catch (error) {
+      console.error('Error in updateUser:', error);
+      throw error;
+    }
+  }
+
+  async deleteUser(): Promise<void> {
+    try {
+      const user = await firstValueFrom(this.getCurrentUser().pipe(first()));
+      if (!user) throw new Error('Felhasználó nincs bejelentkezve');
+
+      const userDocRef = doc(this.usersCollection, user.uid);
+      await deleteDoc(userDocRef);
+
+      await deleteUser(user);
+
+      this.router.navigateByUrl('/');
+    } catch (error: any) {
+      console.error('Error in deleteUser:', error);
+      throw error;
+    }
   }
 }
