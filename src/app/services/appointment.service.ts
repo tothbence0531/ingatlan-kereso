@@ -1,5 +1,13 @@
 import { inject, Injectable, Injector } from '@angular/core';
-import { firstValueFrom, map, Observable, of, switchMap, take } from 'rxjs';
+import {
+  first,
+  firstValueFrom,
+  map,
+  Observable,
+  of,
+  switchMap,
+  take,
+} from 'rxjs';
 import { Appointment } from '../models/appointment.model';
 import { AuthService } from './auth.service';
 import {
@@ -8,10 +16,12 @@ import {
   where,
   query,
   getDocs,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { AppUser } from '../models/user.model';
 import { User } from '@angular/fire/auth';
+import { PropertyService } from './property.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +31,11 @@ export class AppointmentService {
   private readonly userCollection;
   private currentUser$: Observable<User | null> = of(null);
 
-  constructor(private authservice: AuthService, private firestore: Firestore) {
+  constructor(
+    private authservice: AuthService,
+    private firestore: Firestore,
+    private propertyService: PropertyService
+  ) {
     this.firestore = inject(Firestore);
     this.appointmentCollection = collection(this.firestore, 'Appointments');
     this.userCollection = collection(this.firestore, 'Users');
@@ -144,5 +158,46 @@ export class AppointmentService {
       }),
       switchMap((appointments) => appointments)
     );
+  }
+
+  async deleteAppointment(appointmentId: string): Promise<void> {
+    try {
+      const user = await firstValueFrom(
+        this.authservice.getCurrentUser().pipe(take(1))
+      );
+      if (!user) throw new Error('Felhasználó nincs bejelentkezve');
+
+      const userDocRef = doc(this.userCollection, user.uid);
+      const userDoc = await getDoc(userDocRef);
+      const appointmentDocRef = doc(this.appointmentCollection, appointmentId);
+      const appointmentDoc = await getDoc(appointmentDocRef);
+      const property$ = this.propertyService.getPropertyById(
+        appointmentDoc.get('propertyId')
+      );
+      const property = await firstValueFrom(property$);
+
+      if (!userDoc.exists()) {
+        throw new Error('Felhasználó nincs bejelentkezve');
+      }
+
+      const userData = userDoc.data() as AppUser;
+      if (
+        !userData.appointments ||
+        (!userData.appointments.includes(appointmentId) &&
+          property?.owner !== user.uid)
+      ) {
+        throw new Error('Az időpont nem hozzáférhető');
+      }
+
+      await deleteDoc(appointmentDocRef);
+
+      const appointments = userData.appointments.filter(
+        (id) => id !== appointmentId
+      );
+      return updateDoc(userDocRef, { appointments });
+    } catch (error) {
+      console.error('Error in deleteAppointment:', error);
+      throw error;
+    }
   }
 }

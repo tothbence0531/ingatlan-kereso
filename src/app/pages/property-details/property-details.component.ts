@@ -58,6 +58,7 @@ export class PropertyDetailsComponent implements OnInit {
   private lightboxSubscription?: Subscription;
   currentLightboxImageIndex = 0;
   loadingState: 'loading' | 'loaded' | 'error' = 'loading';
+  saved = false;
 
   constructor(
     private authService: AuthService,
@@ -87,6 +88,10 @@ export class PropertyDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadProperty();
+  }
+
+  loadProperty() {
     const propertyId = this.route.snapshot.paramMap.get('id');
     if (!propertyId) {
       this.router.navigate(['/not-found']);
@@ -105,6 +110,17 @@ export class PropertyDetailsComponent implements OnInit {
           this.loadingState = 'error';
           this.router.navigate(['/not-found']);
         }
+
+        this.propertyService.isPropertySaved(propertyId).subscribe({
+          next: (saved) => {
+            if (saved !== undefined) {
+              this.saved = saved;
+            }
+          },
+          error: (err) => {
+            console.error('Hiba a mentett állapot lekérdezésekor:', err);
+          },
+        });
       },
       error: () => {
         this.loadingState = 'error';
@@ -262,5 +278,26 @@ export class PropertyDetailsComponent implements OnInit {
 
   reloadPage() {
     this.router.navigate(['/property-list']);
+  }
+
+  toggleSaved() {
+    if (!this.property?.id) return;
+
+    this.propertyService
+      .toggleSavedProperty(this.property.id)
+      .then(() => {
+        this.loadProperty();
+        if (this.property) {
+          this.propertyService.isPropertySaved(this.property.id).subscribe({
+            next: (saved) => {
+              if (saved === undefined) return;
+              this.saved = saved;
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error in toggleSavedProperty:', error);
+      });
   }
 }

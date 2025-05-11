@@ -4,7 +4,14 @@ import { firstValueFrom, map, Observable, take } from 'rxjs';
 
 import { SearchCriteria } from '../models/search.model';
 import { AuthService } from './auth.service';
-import { collection, collectionData, Firestore } from '@angular/fire/firestore';
+import {
+  collection,
+  collectionData,
+  Firestore,
+  getDocs,
+  query,
+  where,
+} from '@angular/fire/firestore';
 import { addDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { AppUser } from '../models/user.model';
 
@@ -164,5 +171,135 @@ export class PropertyService {
       console.error('Error in property addition process:', error);
       throw error;
     }
+  }
+
+  async getListingsForCurrentUser(): Promise<Property[]> {
+    const user = await firstValueFrom(
+      this.authService.getCurrentUserData$().pipe(take(1))
+    );
+
+    if (!user) throw new Error('Felhasználó nincs bejelentkezve');
+
+    const userDocRef = doc(this.userCollection, user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+      throw new Error('Felhasználó nincs bejelentkezve');
+    }
+
+    const userData = userDoc.data() as AppUser;
+
+    if (userData.role != 'seller' || !userData.listings) {
+      throw new Error('Nincsenek hirdetések');
+    }
+
+    const batchSize = 10;
+    const batches = [];
+
+    for (let i = 0; i < userData.listings.length; i += batchSize) {
+      const batch = userData.listings.slice(i, i + batchSize);
+      const q = query(this.propertyCollection, where('id', 'in', batch));
+      batches.push(getDocs(q));
+    }
+
+    const batchSnapshots = await Promise.all(batches);
+    const properties: Property[] = [];
+
+    for (const snapshot of batchSnapshots) {
+      snapshot.forEach((doc) => {
+        const property = doc.data() as Property;
+        if (!properties.some((p) => p.id === property.id)) {
+          properties.push(property);
+        }
+      });
+    }
+
+    return properties;
+  }
+
+  async getSavedProperties(): Promise<Property[]> {
+    const user = await firstValueFrom(
+      this.authService.getCurrentUserData$().pipe(take(1))
+    );
+
+    if (!user) throw new Error('Felhasználó nincs bejelentkezve');
+
+    const userDocRef = doc(this.userCollection, user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+      throw new Error('Felhasználó nincs bejelentkezve');
+    }
+
+    const userData = userDoc.data() as AppUser;
+
+    if (!userData.savedProperties) {
+      throw new Error('Nincsenek mentett ingatlanok');
+    }
+
+    const batchSize = 10;
+    const batches = [];
+
+    for (let i = 0; i < userData.savedProperties.length; i += batchSize) {
+      const batch = userData.savedProperties.slice(i, i + batchSize);
+      const q = query(this.propertyCollection, where('id', 'in', batch));
+      batches.push(getDocs(q));
+    }
+
+    const batchSnapshots = await Promise.all(batches);
+    const properties: Property[] = [];
+
+    for (const snapshot of batchSnapshots) {
+      snapshot.forEach((doc) => {
+        const property = doc.data() as Property;
+        if (!properties.some((p) => p.id === property.id)) {
+          properties.push(property);
+        }
+      });
+    }
+    return properties;
+  }
+
+  async toggleSavedProperty(propertyId: string): Promise<void> {
+    const user = await firstValueFrom(
+      this.authService.getCurrentUserData$().pipe(take(1))
+    );
+
+    if (!user) throw new Error('Felhasználó nincs bejelentkezve');
+
+    const userDocRef = doc(this.userCollection, user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+      throw new Error('Felhasználó nincs bejelentkezve');
+    }
+
+    const userData = userDoc.data() as AppUser;
+
+    if (userData.savedProperties?.includes(propertyId)) {
+      userData.savedProperties = userData.savedProperties.filter(
+        (id) => id !== propertyId
+      );
+
+      return await updateDoc(userDocRef, { ...userData });
+    }
+
+    if (!userData.savedProperties) {
+      userData.savedProperties = [];
+    }
+
+    userData.savedProperties.push(propertyId);
+
+    await updateDoc(userDocRef, { savedProperties: userData.savedProperties });
+  }
+
+  isPropertySaved(propertyId: string): Observable<boolean | undefined> {
+    const user = this.authService.getCurrentUserData$();
+    return user.pipe(
+      map((user) => {
+        if (!user) return false;
+        return user.savedProperties?.includes(propertyId);
+      })
+    );
   }
 }

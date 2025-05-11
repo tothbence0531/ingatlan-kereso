@@ -20,6 +20,8 @@ import { AsyncPipe } from '@angular/common';
 import { RoleTranslatePipe } from '../../pipes/role-translate.pipe';
 import { Appointment } from '../../models/appointment.model';
 import { AppointmentService } from '../../services/appointment.service';
+import { PropertyService } from '../../services/property.service';
+import { Property } from '../../models/property.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -42,12 +44,15 @@ export class UserProfileComponent {
   currentUser: Observable<User | null> = of(null);
   currentUserData$: Observable<AppUser | null> = of(null);
   appointments: Observable<Appointment[]> = of([]);
+  listings: Property[] = [];
+  savedProperties: Property[] = [];
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private propertyService: PropertyService
   ) {
     this.currentUser = authService.getCurrentUser();
     this.currentUserData$ = this.authService.getCurrentUserData$();
@@ -61,6 +66,15 @@ export class UserProfileComponent {
       role: ['', [Validators.required]],
     });
 
+    this.getUserData();
+
+    this.updateProfileForm.get('email')?.disable();
+
+    this.getListingsForCurrentUser();
+    this.getSavedProperties();
+  }
+
+  getUserData() {
     this.currentUserData$.pipe(first()).subscribe((user) => {
       if (user) {
         this.updateProfileForm.patchValue({
@@ -71,8 +85,6 @@ export class UserProfileComponent {
         });
       }
     });
-
-    this.updateProfileForm.get('email')?.disable();
   }
 
   async updateProfile() {
@@ -87,7 +99,7 @@ export class UserProfileComponent {
 
       await this.authService.updateUser(updateUserData).then(() => {
         this.updateProfileForm.reset();
-        window.location.reload();
+        this.getUserData();
       });
     } catch (error) {
       console.error('Error in updateProfile:', error);
@@ -95,8 +107,33 @@ export class UserProfileComponent {
   }
 
   deleteUser() {
+    if (!confirm('Biztos törölni szeretnéd a fiókod?')) return;
     this.authService.deleteUser().then(() => {
       this.router.navigateByUrl('/');
+    });
+  }
+
+  async deleteAppointment(event: Appointment) {
+    if (!confirm('Biztos törölni szeretnéd ezt az időpontot?')) return;
+    try {
+      await this.appointmentService.deleteAppointment(event.id).then(() => {
+        this.appointments =
+          this.appointmentService.getAppointmentsFromCurrentUser();
+      });
+    } catch (error) {
+      console.error('Error in deleteAppointment:', error);
+    }
+  }
+
+  getListingsForCurrentUser() {
+    this.propertyService.getListingsForCurrentUser().then((listings) => {
+      this.listings = listings;
+    });
+  }
+
+  getSavedProperties() {
+    this.propertyService.getSavedProperties().then((savedProperties) => {
+      this.savedProperties = savedProperties;
     });
   }
 }

@@ -28,7 +28,13 @@
           <mat-icon>favorite</mat-icon>
           <h2>Kedvenc ingatlanok</h2>
         </div>
-        <div class="__listings"></div>
+        <div class="__listings">
+          @for (property of this.savedProperties; track $index) {
+          <app-property-card [property]="property"></app-property-card>
+          } @empty {
+          <p class="empty">Nincsenek mentett ingatlanok</p>
+          }
+        </div>
       </div>
 
       <div class="appointments-container">
@@ -39,7 +45,10 @@
           @for (appointment of this.appointments | async; track $index) {
           <app-appointment-card
             [appointment]="appointment"
+            (onAppointmentDeleted)="deleteAppointment($event)"
           ></app-appointment-card>
+          } @empty {
+          <p class="empty">Nincsenek időpontok</p>
           }
         </div>
       </div>
@@ -57,7 +66,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" />
+          <input matInput formControlName="email" readonly />
         </mat-form-field>
         <mat-radio-group formControlName="role" class="role-radio-group">
           <mat-radio-button value="buyer" class="radio"
@@ -77,6 +86,7 @@
         </div>
       </form>
 
+      @if ((this.currentUserData$ | async)?.role === 'seller') {
       <div class="listings-container">
         <div class="__header">
           <h2>Hirdetéseim</h2>
@@ -84,8 +94,15 @@
             <mat-icon>add</mat-icon>
           </button>
         </div>
-        <div class="__listings"></div>
+        <div class="__listings">
+          @for (property of this.listings; track $index) {
+          <app-property-card [property]="property"></app-property-card>
+          } @empty {
+          <p class="empty">Nincsenek hirdetések</p>
+          }
+        </div>
       </div>
+      }
     </div>
   </div>
 </div>

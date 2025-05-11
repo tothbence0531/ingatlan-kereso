@@ -9,6 +9,7 @@ import {
   Observable,
   of,
   switchMap,
+  take,
 } from 'rxjs';
 import {
   createUserWithEmailAndPassword,
@@ -151,10 +152,16 @@ export class AuthService {
     uid: string,
     user: Partial<AppUser>
   ): Promise<void> {
-    const userRef = doc(collection(this.firestore, 'Users'), uid);
+    const userRef = doc(this.usersCollection, uid);
     return await setDoc(userRef, user);
   }
 
+  /**
+   * updates the user data in firestore with the supplied data
+   * throws an error if the user is not logged in
+   * @param userData data to update
+   * @returns promise that resolves to void
+   */
   async updateUser(userData: Partial<AppUser>): Promise<void> {
     try {
       const user = await firstValueFrom(this.getCurrentUser().pipe(first()));
@@ -178,6 +185,12 @@ export class AuthService {
     }
   }
 
+  /**
+   * deletes the user from firestore and from the auth service
+   * throws an error if the user is not logged in
+   * redirects to the homepage
+   * @returns promise that resolves to void
+   */
   async deleteUser(): Promise<void> {
     try {
       const user = await firstValueFrom(this.getCurrentUser().pipe(first()));

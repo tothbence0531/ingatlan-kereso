@@ -103,7 +103,8 @@
           matRipple
           matTooltip="Kedvencekhez adás"
           [matRippleRadius]="40"
-          >favorite</mat-icon
+          (click)="toggleSaved()"
+          >{{ saved ? "favorite" : "favorite_border" }}</mat-icon
         >
       </div>
       @if ( property?.images?.[0] != null){
