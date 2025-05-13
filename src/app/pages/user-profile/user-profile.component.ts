@@ -99,7 +99,7 @@ export class UserProfileComponent {
 
       await this.authService.updateUser(updateUserData).then(() => {
         this.updateProfileForm.reset();
-        this.getUserData();
+        window.location.reload();
       });
     } catch (error) {
       console.error('Error in updateProfile:', error);

@@ -18,7 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { Auth, authState, User } from '@angular/fire/auth';
-import { map, Observable, Subscription } from 'rxjs';
+import { map, Observable, of, Subscription } from 'rxjs';
 import { StepperOrientation } from '@angular/material/stepper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { AppointmentService } from '../../services/appointment.service';
@@ -26,6 +26,7 @@ import { Lightbox, IAlbum, LightboxEvent, LIGHTBOX_EVENT } from 'ngx-lightbox';
 import { LightboxModule } from 'ngx-lightbox';
 import { HostListener } from '@angular/core';
 import { Appointment } from '../../models/appointment.model';
+import { PropertyCardComponent } from '../../components/property-card/property-card.component';
 
 @Component({
   selector: 'app-property-details',
@@ -41,6 +42,7 @@ import { Appointment } from '../../models/appointment.model';
     NgxMaterialTimepickerModule,
     AsyncPipe,
     LightboxModule,
+    PropertyCardComponent,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './property-details.component.html',
@@ -59,6 +61,7 @@ export class PropertyDetailsComponent implements OnInit {
   currentLightboxImageIndex = 0;
   loadingState: 'loading' | 'loaded' | 'error' = 'loading';
   saved = false;
+  similarProperties: Property[] = [];
 
   constructor(
     private authService: AuthService,
@@ -88,7 +91,18 @@ export class PropertyDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadProperty();
+    this.route.paramMap.subscribe(() => {
+      this.loadProperty();
+    });
+  }
+
+  loadSimilarProperties() {
+    if (!this.property?.id) return;
+    this.propertyService
+      .getSimilarProperties(this.property)
+      .then((properties) => {
+        this.similarProperties = properties;
+      });
   }
 
   loadProperty() {
@@ -106,6 +120,7 @@ export class PropertyDetailsComponent implements OnInit {
           this.property = property;
           this.initAlbum();
           this.loadingState = 'loaded';
+          this.loadSimilarProperties();
         } else {
           this.loadingState = 'error';
           this.router.navigate(['/not-found']);

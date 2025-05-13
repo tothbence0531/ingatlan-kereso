@@ -1,7 +1,10 @@
 <div class="top-wrapper">
   <app-navbar></app-navbar>
   <section class="container">
-    <div [ngStyle]="{ color: 'red', fontWeight: 'bold' }" class="debug">
+    <div
+      [ngStyle]="{ color: 'red', fontWeight: 'bold', display: 'none' }"
+      class="debug"
+    >
       <p>DEBUG</p>
       <p>
         isAuthenticated:

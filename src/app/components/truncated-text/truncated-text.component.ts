@@ -1,26 +1,17 @@
 import { Component, Input } from '@angular/core';
-import { MaterialModule } from '../../modules/material.module';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-truncated-text',
-  imports: [MaterialModule],
   templateUrl: './truncated-text.component.html',
-  styleUrl: './truncated-text.component.scss',
+  styleUrls: ['./truncated-text.component.scss'],
 })
 export class TruncatedTextComponent {
   @Input() text: string = '';
-  @Input() maxLength: number = 150;
 
-  isExpanded = false;
+  constructor(private sanitizer: DomSanitizer) {}
 
-  get truncatedText(): string {
-    if (!this.text || this.text.length <= this.maxLength || this.isExpanded) {
-      return this.text;
-    }
-    return this.text.substring(0, this.maxLength);
-  }
-
-  toggleExpand(): void {
-    this.isExpanded = !this.isExpanded;
+  get sanitizedText(): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(this.text);
   }
 }

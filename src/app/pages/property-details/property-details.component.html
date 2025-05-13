@@ -84,7 +84,7 @@
   </div>
 </div>
 
-<div class="container">
+<div class="container-card container">
   @switch(loadingState) { @case ('loading') {
   <div class="loading-container">
     <mat-spinner diameter="50"></mat-spinner>
@@ -197,6 +197,19 @@
     </button>
   </div>
   } }
+</div>
+
+<div class="container">
+  <div class="similar-container">
+    <h2>Hasonló hirdetések</h2>
+    <div class="similar-property-cards">
+      @for (item of this.similarProperties; track $index) {
+      <app-property-card [property]="item"></app-property-card>
+      } @empty {
+      <p class="empty">Nincsenek hasonló hirdetések</p>
+      }
+    </div>
+  </div>
 </div>
 
 <div class="footer-wrapper">

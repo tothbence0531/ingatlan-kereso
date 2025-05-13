@@ -75,7 +75,7 @@ export class RegisterComponent {
         lastName,
         role
       );
-      this.router.navigateByUrl('/login');
+      this.router.navigateByUrl('/');
     } catch (error: any) {
       let errorMessage = 'Ismeretlen hiba történt a regisztráció során';
       switch (error.code) {
